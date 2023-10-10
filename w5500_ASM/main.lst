@@ -1,0 +1,2601 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module main
+                                      6 	.optsdcc -mmcs51 --model-medium
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _main
+                                     12 	.globl _loop
+                                     13 	.globl _setup
+                                     14 	.globl _setuptcp
+                                     15 	.globl _menudisplay
+                                     16 	.globl _displayMACAddress
+                                     17 	.globl _displayIPAddress
+                                     18 	.globl _extractAndAssign
+                                     19 	.globl _parseMAC
+                                     20 	.globl _hexCharToInt
+                                     21 	.globl _strcmp
+                                     22 	.globl _strlen
+                                     23 	.globl _toupper
+                                     24 	.globl __w5500_write
+                                     25 	.globl __w5500_readchar
+                                     26 	.globl __w5500_listen
+                                     27 	.globl __w5500_close
+                                     28 	.globl __w5500_open
+                                     29 	.globl __w5500_set_tcp
+                                     30 	.globl __w5500_set_udp
+                                     31 	.globl __w5500_send
+                                     32 	.globl __w5500_clear_SNIR
+                                     33 	.globl __w5500_get_SIR
+                                     34 	.globl __w5500_get_SIMR
+                                     35 	.globl __w5500_set_IMR
+                                     36 	.globl __w5500_get_IMR
+                                     37 	.globl __w5500_get_status
+                                     38 	.globl __w5500_bytesinbuffer
+                                     39 	.globl __w5500_writeto
+                                     40 	.globl __w5500_set_destinationip
+                                     41 	.globl __w5500_set_remoteport
+                                     42 	.globl __w5500_set_sourceport
+                                     43 	.globl __spigeneric_reset
+                                     44 	.globl __serial_putbyte_dec
+                                     45 	.globl __serial_putbyte_hex
+                                     46 	.globl __serial_emptybuffer
+                                     47 	.globl __serial_putstr
+                                     48 	.globl __serial_putchar
+                                     49 	.globl __serial_begin
+                                     50 	.globl _CY
+                                     51 	.globl _AC
+                                     52 	.globl _F0
+                                     53 	.globl _RS1
+                                     54 	.globl _RS0
+                                     55 	.globl _OV
+                                     56 	.globl _F1
+                                     57 	.globl _P
+                                     58 	.globl _PS
+                                     59 	.globl _PT1
+                                     60 	.globl _PX1
+                                     61 	.globl _PT0
+                                     62 	.globl _PX0
+                                     63 	.globl _RD
+                                     64 	.globl _WR
+                                     65 	.globl _T1
+                                     66 	.globl _T0
+                                     67 	.globl _INT1
+                                     68 	.globl _INT0
+                                     69 	.globl _TXD
+                                     70 	.globl _RXD
+                                     71 	.globl _P3_7
+                                     72 	.globl _P3_6
+                                     73 	.globl _P3_5
+                                     74 	.globl _P3_4
+                                     75 	.globl _P3_3
+                                     76 	.globl _P3_2
+                                     77 	.globl _P3_1
+                                     78 	.globl _P3_0
+                                     79 	.globl _EA
+                                     80 	.globl _ES
+                                     81 	.globl _ET1
+                                     82 	.globl _EX1
+                                     83 	.globl _ET0
+                                     84 	.globl _EX0
+                                     85 	.globl _P2_7
+                                     86 	.globl _P2_6
+                                     87 	.globl _P2_5
+                                     88 	.globl _P2_4
+                                     89 	.globl _P2_3
+                                     90 	.globl _P2_2
+                                     91 	.globl _P2_1
+                                     92 	.globl _P2_0
+                                     93 	.globl _SM0
+                                     94 	.globl _SM1
+                                     95 	.globl _SM2
+                                     96 	.globl _REN
+                                     97 	.globl _TB8
+                                     98 	.globl _RB8
+                                     99 	.globl _TI
+                                    100 	.globl _RI
+                                    101 	.globl _P1_7
+                                    102 	.globl _P1_6
+                                    103 	.globl _P1_5
+                                    104 	.globl _P1_4
+                                    105 	.globl _P1_3
+                                    106 	.globl _P1_2
+                                    107 	.globl _P1_1
+                                    108 	.globl _P1_0
+                                    109 	.globl _TF1
+                                    110 	.globl _TR1
+                                    111 	.globl _TF0
+                                    112 	.globl _TR0
+                                    113 	.globl _IE1
+                                    114 	.globl _IT1
+                                    115 	.globl _IE0
+                                    116 	.globl _IT0
+                                    117 	.globl _P0_7
+                                    118 	.globl _P0_6
+                                    119 	.globl _P0_5
+                                    120 	.globl _P0_4
+                                    121 	.globl _P0_3
+                                    122 	.globl _P0_2
+                                    123 	.globl _P0_1
+                                    124 	.globl _P0_0
+                                    125 	.globl _B
+                                    126 	.globl _ACC
+                                    127 	.globl _PSW
+                                    128 	.globl _IP
+                                    129 	.globl _P3
+                                    130 	.globl _IE
+                                    131 	.globl _P2
+                                    132 	.globl _SBUF
+                                    133 	.globl _SCON
+                                    134 	.globl _P1
+                                    135 	.globl _TH1
+                                    136 	.globl _TH0
+                                    137 	.globl _TL1
+                                    138 	.globl _TL0
+                                    139 	.globl _TMOD
+                                    140 	.globl _TCON
+                                    141 	.globl _PCON
+                                    142 	.globl _DPH
+                                    143 	.globl _DPL
+                                    144 	.globl _SP
+                                    145 	.globl _P0
+                                    146 	.globl _strcmp_PARM_2
+                                    147 	.globl _serialInput
+                                    148 	.globl _RTU_Address
+                                    149 	.globl _dest_ip
+                                    150 	.globl _mac
+                                    151 	.globl _ip
+                                    152 	.globl _subnet
+                                    153 	.globl _gateway
+                                    154 ;--------------------------------------------------------
+                                    155 ; special function registers
+                                    156 ;--------------------------------------------------------
+                                    157 	.area RSEG    (ABS,DATA)
+      000000                        158 	.org 0x0000
+                           000080   159 _P0	=	0x0080
+                           000081   160 _SP	=	0x0081
+                           000082   161 _DPL	=	0x0082
+                           000083   162 _DPH	=	0x0083
+                           000087   163 _PCON	=	0x0087
+                           000088   164 _TCON	=	0x0088
+                           000089   165 _TMOD	=	0x0089
+                           00008A   166 _TL0	=	0x008a
+                           00008B   167 _TL1	=	0x008b
+                           00008C   168 _TH0	=	0x008c
+                           00008D   169 _TH1	=	0x008d
+                           000090   170 _P1	=	0x0090
+                           000098   171 _SCON	=	0x0098
+                           000099   172 _SBUF	=	0x0099
+                           0000A0   173 _P2	=	0x00a0
+                           0000A8   174 _IE	=	0x00a8
+                           0000B0   175 _P3	=	0x00b0
+                           0000B8   176 _IP	=	0x00b8
+                           0000D0   177 _PSW	=	0x00d0
+                           0000E0   178 _ACC	=	0x00e0
+                           0000F0   179 _B	=	0x00f0
+                                    180 ;--------------------------------------------------------
+                                    181 ; special function bits
+                                    182 ;--------------------------------------------------------
+                                    183 	.area RSEG    (ABS,DATA)
+      000000                        184 	.org 0x0000
+                           000080   185 _P0_0	=	0x0080
+                           000081   186 _P0_1	=	0x0081
+                           000082   187 _P0_2	=	0x0082
+                           000083   188 _P0_3	=	0x0083
+                           000084   189 _P0_4	=	0x0084
+                           000085   190 _P0_5	=	0x0085
+                           000086   191 _P0_6	=	0x0086
+                           000087   192 _P0_7	=	0x0087
+                           000088   193 _IT0	=	0x0088
+                           000089   194 _IE0	=	0x0089
+                           00008A   195 _IT1	=	0x008a
+                           00008B   196 _IE1	=	0x008b
+                           00008C   197 _TR0	=	0x008c
+                           00008D   198 _TF0	=	0x008d
+                           00008E   199 _TR1	=	0x008e
+                           00008F   200 _TF1	=	0x008f
+                           000090   201 _P1_0	=	0x0090
+                           000091   202 _P1_1	=	0x0091
+                           000092   203 _P1_2	=	0x0092
+                           000093   204 _P1_3	=	0x0093
+                           000094   205 _P1_4	=	0x0094
+                           000095   206 _P1_5	=	0x0095
+                           000096   207 _P1_6	=	0x0096
+                           000097   208 _P1_7	=	0x0097
+                           000098   209 _RI	=	0x0098
+                           000099   210 _TI	=	0x0099
+                           00009A   211 _RB8	=	0x009a
+                           00009B   212 _TB8	=	0x009b
+                           00009C   213 _REN	=	0x009c
+                           00009D   214 _SM2	=	0x009d
+                           00009E   215 _SM1	=	0x009e
+                           00009F   216 _SM0	=	0x009f
+                           0000A0   217 _P2_0	=	0x00a0
+                           0000A1   218 _P2_1	=	0x00a1
+                           0000A2   219 _P2_2	=	0x00a2
+                           0000A3   220 _P2_3	=	0x00a3
+                           0000A4   221 _P2_4	=	0x00a4
+                           0000A5   222 _P2_5	=	0x00a5
+                           0000A6   223 _P2_6	=	0x00a6
+                           0000A7   224 _P2_7	=	0x00a7
+                           0000A8   225 _EX0	=	0x00a8
+                           0000A9   226 _ET0	=	0x00a9
+                           0000AA   227 _EX1	=	0x00aa
+                           0000AB   228 _ET1	=	0x00ab
+                           0000AC   229 _ES	=	0x00ac
+                           0000AF   230 _EA	=	0x00af
+                           0000B0   231 _P3_0	=	0x00b0
+                           0000B1   232 _P3_1	=	0x00b1
+                           0000B2   233 _P3_2	=	0x00b2
+                           0000B3   234 _P3_3	=	0x00b3
+                           0000B4   235 _P3_4	=	0x00b4
+                           0000B5   236 _P3_5	=	0x00b5
+                           0000B6   237 _P3_6	=	0x00b6
+                           0000B7   238 _P3_7	=	0x00b7
+                           0000B0   239 _RXD	=	0x00b0
+                           0000B1   240 _TXD	=	0x00b1
+                           0000B2   241 _INT0	=	0x00b2
+                           0000B3   242 _INT1	=	0x00b3
+                           0000B4   243 _T0	=	0x00b4
+                           0000B5   244 _T1	=	0x00b5
+                           0000B6   245 _WR	=	0x00b6
+                           0000B7   246 _RD	=	0x00b7
+                           0000B8   247 _PX0	=	0x00b8
+                           0000B9   248 _PT0	=	0x00b9
+                           0000BA   249 _PX1	=	0x00ba
+                           0000BB   250 _PT1	=	0x00bb
+                           0000BC   251 _PS	=	0x00bc
+                           0000D0   252 _P	=	0x00d0
+                           0000D1   253 _F1	=	0x00d1
+                           0000D2   254 _OV	=	0x00d2
+                           0000D3   255 _RS0	=	0x00d3
+                           0000D4   256 _RS1	=	0x00d4
+                           0000D5   257 _F0	=	0x00d5
+                           0000D6   258 _AC	=	0x00d6
+                           0000D7   259 _CY	=	0x00d7
+                                    260 ;--------------------------------------------------------
+                                    261 ; overlayable register banks
+                                    262 ;--------------------------------------------------------
+                                    263 	.area REG_BANK_0	(REL,OVR,DATA)
+      000000                        264 	.ds 8
+                                    265 ;--------------------------------------------------------
+                                    266 ; internal ram data
+                                    267 ;--------------------------------------------------------
+                                    268 	.area DSEG    (DATA)
+                                    269 ;--------------------------------------------------------
+                                    270 ; overlayable items in internal ram 
+                                    271 ;--------------------------------------------------------
+                                    272 	.area	OSEG    (OVR,DATA)
+      000000                        273 _strcmp_sloc0_1_0:
+      000000                        274 	.ds 1
+      000001                        275 _strcmp_sloc1_1_0:
+      000001                        276 	.ds 1
+      000002                        277 _strcmp_sloc2_1_0:
+      000002                        278 	.ds 3
+                                    279 	.area	OSEG    (OVR,DATA)
+      000000                        280 _extractAndAssign_sloc0_1_0:
+      000000                        281 	.ds 3
+                                    282 ;--------------------------------------------------------
+                                    283 ; Stack segment in internal ram 
+                                    284 ;--------------------------------------------------------
+                                    285 	.area	SSEG
+      000000                        286 __start__stack:
+      000000                        287 	.ds	1
+                                    288 
+                                    289 ;--------------------------------------------------------
+                                    290 ; indirectly addressable internal ram data
+                                    291 ;--------------------------------------------------------
+                                    292 	.area ISEG    (DATA)
+                                    293 ;--------------------------------------------------------
+                                    294 ; absolute internal ram data
+                                    295 ;--------------------------------------------------------
+                                    296 	.area IABS    (ABS,DATA)
+                                    297 	.area IABS    (ABS,DATA)
+                                    298 ;--------------------------------------------------------
+                                    299 ; bit data
+                                    300 ;--------------------------------------------------------
+                                    301 	.area BSEG    (BIT)
+                                    302 ;--------------------------------------------------------
+                                    303 ; paged external ram data
+                                    304 ;--------------------------------------------------------
+                                    305 	.area PSEG    (PAG,XDATA)
+      000000                        306 _gateway::
+      000000                        307 	.ds 4
+      000004                        308 _subnet::
+      000004                        309 	.ds 4
+      000008                        310 _ip::
+      000008                        311 	.ds 4
+      00000C                        312 _mac::
+      00000C                        313 	.ds 6
+      000012                        314 _dest_ip::
+      000012                        315 	.ds 4
+      000016                        316 _RTU_Address::
+      000016                        317 	.ds 1
+      000017                        318 _serialInput::
+      000017                        319 	.ds 3
+      00001A                        320 _strcmp_PARM_2:
+      00001A                        321 	.ds 3
+      00001D                        322 _parseMAC_str_65536_57:
+      00001D                        323 	.ds 3
+      000020                        324 _extractAndAssign_arr_65536_62:
+      000020                        325 	.ds 3
+      000023                        326 _extractAndAssign_curr_address_65536_63:
+      000023                        327 	.ds 3
+      000026                        328 _extractAndAssign_octet_65536_63:
+      000026                        329 	.ds 1
+      000027                        330 _extractAndAssign_value_65536_63:
+      000027                        331 	.ds 1
+      000028                        332 _loop_recieved_udp_65536_83:
+      000028                        333 	.ds 1
+      000029                        334 _loop_recieved_tcp_65536_83:
+      000029                        335 	.ds 1
+      00002A                        336 _loop_input_buffer_65536_83:
+      00002A                        337 	.ds 20
+      00003E                        338 _loop_arrbuf_65536_83:
+      00003E                        339 	.ds 20
+      000052                        340 _loop_serial_buffer_65536_83:
+      000052                        341 	.ds 20
+      000066                        342 _loop_serial_index_65536_83:
+      000066                        343 	.ds 1
+      000067                        344 _loop_inputLength_131073_85:
+      000067                        345 	.ds 1
+      000068                        346 _loop_fail_262145_107:
+      000068                        347 	.ds 14
+                                    348 ;--------------------------------------------------------
+                                    349 ; external ram data
+                                    350 ;--------------------------------------------------------
+                                    351 	.area XSEG    (XDATA)
+                                    352 ;--------------------------------------------------------
+                                    353 ; absolute external ram data
+                                    354 ;--------------------------------------------------------
+                                    355 	.area XABS    (ABS,XDATA)
+                                    356 ;--------------------------------------------------------
+                                    357 ; external initialized ram data
+                                    358 ;--------------------------------------------------------
+                                    359 	.area XISEG   (XDATA)
+                                    360 	.area HOME    (CODE)
+                                    361 	.area GSINIT0 (CODE)
+                                    362 	.area GSINIT1 (CODE)
+                                    363 	.area GSINIT2 (CODE)
+                                    364 	.area GSINIT3 (CODE)
+                                    365 	.area GSINIT4 (CODE)
+                                    366 	.area GSINIT5 (CODE)
+                                    367 	.area GSINIT  (CODE)
+                                    368 	.area GSFINAL (CODE)
+                                    369 	.area CSEG    (CODE)
+                                    370 ;--------------------------------------------------------
+                                    371 ; interrupt vector 
+                                    372 ;--------------------------------------------------------
+                                    373 	.area HOME    (CODE)
+      000000                        374 __interrupt_vect:
+      000000 02r00r00         [24]  375 	ljmp	__sdcc_gsinit_startup
+      000003 32               [24]  376 	reti
+      000004                        377 	.ds	7
+      00000B 32               [24]  378 	reti
+      00000C                        379 	.ds	7
+      000013 32               [24]  380 	reti
+      000014                        381 	.ds	7
+      00001B 32               [24]  382 	reti
+      00001C                        383 	.ds	7
+      000023 02r00r00         [24]  384 	ljmp	__serial_interrupt
+                                    385 ;--------------------------------------------------------
+                                    386 ; global & static initialisations
+                                    387 ;--------------------------------------------------------
+                                    388 	.area HOME    (CODE)
+                                    389 	.area GSINIT  (CODE)
+                                    390 	.area GSFINAL (CODE)
+                                    391 	.area GSINIT  (CODE)
+                                    392 	.globl __sdcc_gsinit_startup
+                                    393 	.globl __sdcc_program_startup
+                                    394 	.globl __start__stack
+                                    395 	.globl __mcs51_genXINIT
+                                    396 	.globl __mcs51_genXRAMCLEAR
+                                    397 	.globl __mcs51_genRAMCLEAR
+                                    398 ;	main.c:8: unsigned char gateway[4] = {192, 168, 16, 1};
+      000000 78r00            [12]  399 	mov	r0,#_gateway
+      000002 74 C0            [12]  400 	mov	a,#0xc0
+      000004 F2               [24]  401 	movx	@r0,a
+      000005 78r01            [12]  402 	mov	r0,#(_gateway + 0x0001)
+      000007 74 A8            [12]  403 	mov	a,#0xa8
+      000009 F2               [24]  404 	movx	@r0,a
+      00000A 78r02            [12]  405 	mov	r0,#(_gateway + 0x0002)
+      00000C 74 10            [12]  406 	mov	a,#0x10
+      00000E F2               [24]  407 	movx	@r0,a
+      00000F 78r03            [12]  408 	mov	r0,#(_gateway + 0x0003)
+      000011 C4               [12]  409 	swap	a
+      000012 F2               [24]  410 	movx	@r0,a
+                                    411 ;	main.c:9: unsigned char subnet[4] = {255, 255, 255, 0};
+      000013 78r04            [12]  412 	mov	r0,#_subnet
+      000015 74 FF            [12]  413 	mov	a,#0xff
+      000017 F2               [24]  414 	movx	@r0,a
+      000018 78r05            [12]  415 	mov	r0,#(_subnet + 0x0001)
+      00001A F2               [24]  416 	movx	@r0,a
+      00001B 78r06            [12]  417 	mov	r0,#(_subnet + 0x0002)
+      00001D F2               [24]  418 	movx	@r0,a
+      00001E 78r07            [12]  419 	mov	r0,#(_subnet + 0x0003)
+      000020 E4               [12]  420 	clr	a
+      000021 F2               [24]  421 	movx	@r0,a
+                                    422 ;	main.c:10: unsigned char ip[4] = {192, 168, 16, 69};
+      000022 78r08            [12]  423 	mov	r0,#_ip
+      000024 74 C0            [12]  424 	mov	a,#0xc0
+      000026 F2               [24]  425 	movx	@r0,a
+      000027 78r09            [12]  426 	mov	r0,#(_ip + 0x0001)
+      000029 74 A8            [12]  427 	mov	a,#0xa8
+      00002B F2               [24]  428 	movx	@r0,a
+      00002C 78r0A            [12]  429 	mov	r0,#(_ip + 0x0002)
+      00002E 74 10            [12]  430 	mov	a,#0x10
+      000030 F2               [24]  431 	movx	@r0,a
+      000031 78r0B            [12]  432 	mov	r0,#(_ip + 0x0003)
+      000033 74 45            [12]  433 	mov	a,#0x45
+      000035 F2               [24]  434 	movx	@r0,a
+                                    435 ;	main.c:11: unsigned char mac[6] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+      000036 78r0C            [12]  436 	mov	r0,#_mac
+      000038 74 DE            [12]  437 	mov	a,#0xde
+      00003A F2               [24]  438 	movx	@r0,a
+      00003B 78r0D            [12]  439 	mov	r0,#(_mac + 0x0001)
+      00003D 74 AD            [12]  440 	mov	a,#0xad
+      00003F F2               [24]  441 	movx	@r0,a
+      000040 78r0E            [12]  442 	mov	r0,#(_mac + 0x0002)
+      000042 74 BE            [12]  443 	mov	a,#0xbe
+      000044 F2               [24]  444 	movx	@r0,a
+      000045 78r0F            [12]  445 	mov	r0,#(_mac + 0x0003)
+      000047 74 EF            [12]  446 	mov	a,#0xef
+      000049 F2               [24]  447 	movx	@r0,a
+      00004A 78r10            [12]  448 	mov	r0,#(_mac + 0x0004)
+      00004C C4               [12]  449 	swap	a
+      00004D F2               [24]  450 	movx	@r0,a
+      00004E 78r11            [12]  451 	mov	r0,#(_mac + 0x0005)
+      000050 74 ED            [12]  452 	mov	a,#0xed
+      000052 F2               [24]  453 	movx	@r0,a
+                                    454 ;	main.c:12: unsigned char dest_ip[4] = {192, 168, 16, 151};
+      000053 78r12            [12]  455 	mov	r0,#_dest_ip
+      000055 74 C0            [12]  456 	mov	a,#0xc0
+      000057 F2               [24]  457 	movx	@r0,a
+      000058 78r13            [12]  458 	mov	r0,#(_dest_ip + 0x0001)
+      00005A 74 A8            [12]  459 	mov	a,#0xa8
+      00005C F2               [24]  460 	movx	@r0,a
+      00005D 78r14            [12]  461 	mov	r0,#(_dest_ip + 0x0002)
+      00005F 74 10            [12]  462 	mov	a,#0x10
+      000061 F2               [24]  463 	movx	@r0,a
+      000062 78r15            [12]  464 	mov	r0,#(_dest_ip + 0x0003)
+      000064 74 97            [12]  465 	mov	a,#0x97
+      000066 F2               [24]  466 	movx	@r0,a
+                                    467 ;	main.c:16: unsigned char RTU_Address = '3';
+      000067 78r16            [12]  468 	mov	r0,#_RTU_Address
+      000069 74 33            [12]  469 	mov	a,#0x33
+      00006B F2               [24]  470 	movx	@r0,a
+                                    471 	.area GSFINAL (CODE)
+      000000 02r00r26         [24]  472 	ljmp	__sdcc_program_startup
+                                    473 ;--------------------------------------------------------
+                                    474 ; Home
+                                    475 ;--------------------------------------------------------
+                                    476 	.area HOME    (CODE)
+                                    477 	.area HOME    (CODE)
+      000026                        478 __sdcc_program_startup:
+      000026 02r0ArC2         [24]  479 	ljmp	_main
+                                    480 ;	return from main will return to caller
+                                    481 ;--------------------------------------------------------
+                                    482 ; code
+                                    483 ;--------------------------------------------------------
+                                    484 	.area CSEG    (CODE)
+                                    485 ;------------------------------------------------------------
+                                    486 ;Allocation info for local variables in function 'strlen'
+                                    487 ;------------------------------------------------------------
+                                    488 ;	main.c:27: unsigned char strlen(const unsigned char* str) {
+                                    489 ;	-----------------------------------------
+                                    490 ;	 function strlen
+                                    491 ;	-----------------------------------------
+      000000                        492 _strlen:
+                           000007   493 	ar7 = 0x07
+                           000006   494 	ar6 = 0x06
+                           000005   495 	ar5 = 0x05
+                           000004   496 	ar4 = 0x04
+                           000003   497 	ar3 = 0x03
+                           000002   498 	ar2 = 0x02
+                           000001   499 	ar1 = 0x01
+                           000000   500 	ar0 = 0x00
+      000000 AD 82            [24]  501 	mov	r5,dpl
+      000002 AE 83            [24]  502 	mov	r6,dph
+      000004 AF F0            [24]  503 	mov	r7,b
+                                    504 ;	main.c:29: while (*(str++)) ++ret;
+      000006 7C 00            [12]  505 	mov	r4,#0x00
+      000008                        506 00101$:
+      000008 8D 82            [24]  507 	mov	dpl,r5
+      00000A 8E 83            [24]  508 	mov	dph,r6
+      00000C 8F F0            [24]  509 	mov	b,r7
+      00000E 12r00r00         [24]  510 	lcall	__gptrget
+      000011 FB               [12]  511 	mov	r3,a
+      000012 A3               [24]  512 	inc	dptr
+      000013 AD 82            [24]  513 	mov	r5,dpl
+      000015 AE 83            [24]  514 	mov	r6,dph
+      000017 EB               [12]  515 	mov	a,r3
+      000018 60 03            [24]  516 	jz	00103$
+      00001A 0C               [12]  517 	inc	r4
+      00001B 80 EB            [24]  518 	sjmp	00101$
+      00001D                        519 00103$:
+                                    520 ;	main.c:30: return ret;
+      00001D 8C 82            [24]  521 	mov	dpl,r4
+                                    522 ;	main.c:31: }
+      00001F 22               [24]  523 	ret
+                                    524 ;------------------------------------------------------------
+                                    525 ;Allocation info for local variables in function 'strcmp'
+                                    526 ;------------------------------------------------------------
+                                    527 ;sloc0                     Allocated with name '_strcmp_sloc0_1_0'
+                                    528 ;sloc1                     Allocated with name '_strcmp_sloc1_1_0'
+                                    529 ;sloc2                     Allocated with name '_strcmp_sloc2_1_0'
+                                    530 ;------------------------------------------------------------
+                                    531 ;	main.c:33: unsigned char strcmp(unsigned char* first, unsigned char* second) {
+                                    532 ;	-----------------------------------------
+                                    533 ;	 function strcmp
+                                    534 ;	-----------------------------------------
+      000020                        535 _strcmp:
+      000020 AD 82            [24]  536 	mov	r5,dpl
+      000022 AE 83            [24]  537 	mov	r6,dph
+      000024 AF F0            [24]  538 	mov	r7,b
+                                    539 ;	main.c:34: while (*first && *second) if (*(first++) != *(second++)) return 0;
+      000026 78r1A            [12]  540 	mov	r0,#_strcmp_PARM_2
+      000028 E2               [24]  541 	movx	a,@r0
+      000029 F5*02            [12]  542 	mov	_strcmp_sloc2_1_0,a
+      00002B 08               [12]  543 	inc	r0
+      00002C E2               [24]  544 	movx	a,@r0
+      00002D F5*03            [12]  545 	mov	(_strcmp_sloc2_1_0 + 1),a
+      00002F 08               [12]  546 	inc	r0
+      000030 E2               [24]  547 	movx	a,@r0
+      000031 F5*04            [12]  548 	mov	(_strcmp_sloc2_1_0 + 2),a
+      000033                        549 00104$:
+      000033 8D 82            [24]  550 	mov	dpl,r5
+      000035 8E 83            [24]  551 	mov	dph,r6
+      000037 8F F0            [24]  552 	mov	b,r7
+      000039 12r00r00         [24]  553 	lcall	__gptrget
+      00003C F5*00            [12]  554 	mov	_strcmp_sloc0_1_0,a
+      00003E 60 2B            [24]  555 	jz	00106$
+      000040 85*02 82         [24]  556 	mov	dpl,_strcmp_sloc2_1_0
+      000043 85*03 83         [24]  557 	mov	dph,(_strcmp_sloc2_1_0 + 1)
+      000046 85*04 F0         [24]  558 	mov	b,(_strcmp_sloc2_1_0 + 2)
+      000049 12r00r00         [24]  559 	lcall	__gptrget
+      00004C F5*01            [12]  560 	mov	_strcmp_sloc1_1_0,a
+      00004E 60 1B            [24]  561 	jz	00106$
+      000050 AC*00            [24]  562 	mov	r4,_strcmp_sloc0_1_0
+      000052 0D               [12]  563 	inc	r5
+      000053 BD 00 01         [24]  564 	cjne	r5,#0x00,00127$
+      000056 0E               [12]  565 	inc	r6
+      000057                        566 00127$:
+      000057 AB*01            [24]  567 	mov	r3,_strcmp_sloc1_1_0
+      000059 05*02            [12]  568 	inc	_strcmp_sloc2_1_0
+      00005B E4               [12]  569 	clr	a
+      00005C B5*02 02         [24]  570 	cjne	a,_strcmp_sloc2_1_0,00128$
+      00005F 05*03            [12]  571 	inc	(_strcmp_sloc2_1_0 + 1)
+      000061                        572 00128$:
+      000061 EC               [12]  573 	mov	a,r4
+      000062 B5 03 02         [24]  574 	cjne	a,ar3,00129$
+      000065 80 CC            [24]  575 	sjmp	00104$
+      000067                        576 00129$:
+      000067 75 82 00         [24]  577 	mov	dpl,#0x00
+      00006A 22               [24]  578 	ret
+      00006B                        579 00106$:
+                                    580 ;	main.c:35: return 1;
+      00006B 75 82 01         [24]  581 	mov	dpl,#0x01
+                                    582 ;	main.c:36: }
+      00006E 22               [24]  583 	ret
+                                    584 ;------------------------------------------------------------
+                                    585 ;Allocation info for local variables in function 'hexCharToInt'
+                                    586 ;------------------------------------------------------------
+                                    587 ;	main.c:38: unsigned char hexCharToInt(char c) {
+                                    588 ;	-----------------------------------------
+                                    589 ;	 function hexCharToInt
+                                    590 ;	-----------------------------------------
+      00006F                        591 _hexCharToInt:
+                                    592 ;	main.c:39: return c <= '9' ? c - '0' : c <= 'F' ? c - 'A' + 10 : c - 'a' + 10;
+      00006F E5 82            [12]  593 	mov	a,dpl
+      000071 FF               [12]  594 	mov	r7,a
+      000072 24 C6            [12]  595 	add	a,#0xff - 0x39
+      000074 40 08            [24]  596 	jc	00103$
+      000076 8F 06            [24]  597 	mov	ar6,r7
+      000078 EE               [12]  598 	mov	a,r6
+      000079 24 D0            [12]  599 	add	a,#0xd0
+      00007B FE               [12]  600 	mov	r6,a
+      00007C 80 13            [24]  601 	sjmp	00104$
+      00007E                        602 00103$:
+      00007E EF               [12]  603 	mov	a,r7
+      00007F 24 B9            [12]  604 	add	a,#0xff - 0x46
+      000081 40 08            [24]  605 	jc	00105$
+      000083 8F 05            [24]  606 	mov	ar5,r7
+      000085 74 C9            [12]  607 	mov	a,#0xc9
+      000087 2D               [12]  608 	add	a,r5
+      000088 FD               [12]  609 	mov	r5,a
+      000089 80 04            [24]  610 	sjmp	00106$
+      00008B                        611 00105$:
+      00008B 74 A9            [12]  612 	mov	a,#0xa9
+      00008D 2F               [12]  613 	add	a,r7
+      00008E FD               [12]  614 	mov	r5,a
+      00008F                        615 00106$:
+      00008F 8D 06            [24]  616 	mov	ar6,r5
+      000091                        617 00104$:
+      000091 8E 82            [24]  618 	mov	dpl,r6
+                                    619 ;	main.c:40: }
+      000093 22               [24]  620 	ret
+                                    621 ;------------------------------------------------------------
+                                    622 ;Allocation info for local variables in function 'parseMAC'
+                                    623 ;------------------------------------------------------------
+                                    624 ;	main.c:42: void parseMAC(const char* str) {
+                                    625 ;	-----------------------------------------
+                                    626 ;	 function parseMAC
+                                    627 ;	-----------------------------------------
+      000094                        628 _parseMAC:
+      000094 AF F0            [24]  629 	mov	r7,b
+      000096 AE 83            [24]  630 	mov	r6,dph
+      000098 E5 82            [12]  631 	mov	a,dpl
+      00009A 78r1D            [12]  632 	mov	r0,#_parseMAC_str_65536_57
+      00009C F2               [24]  633 	movx	@r0,a
+      00009D 08               [12]  634 	inc	r0
+      00009E EE               [12]  635 	mov	a,r6
+      00009F F2               [24]  636 	movx	@r0,a
+      0000A0 08               [12]  637 	inc	r0
+      0000A1 EF               [12]  638 	mov	a,r7
+      0000A2 F2               [24]  639 	movx	@r0,a
+                                    640 ;	main.c:43: if(str[0] == 'M' && str[1] == 'A' && str[2] == 'C' && str[3] == '=') {
+      0000A3 78r1D            [12]  641 	mov	r0,#_parseMAC_str_65536_57
+      0000A5 E2               [24]  642 	movx	a,@r0
+      0000A6 F5 82            [12]  643 	mov	dpl,a
+      0000A8 08               [12]  644 	inc	r0
+      0000A9 E2               [24]  645 	movx	a,@r0
+      0000AA F5 83            [12]  646 	mov	dph,a
+      0000AC 08               [12]  647 	inc	r0
+      0000AD E2               [24]  648 	movx	a,@r0
+      0000AE F5 F0            [12]  649 	mov	b,a
+      0000B0 12r00r00         [24]  650 	lcall	__gptrget
+      0000B3 FC               [12]  651 	mov	r4,a
+      0000B4 BC 4D 02         [24]  652 	cjne	r4,#0x4d,00137$
+      0000B7 80 01            [24]  653 	sjmp	00138$
+      0000B9                        654 00137$:
+      0000B9 22               [24]  655 	ret
+      0000BA                        656 00138$:
+      0000BA 78r1D            [12]  657 	mov	r0,#_parseMAC_str_65536_57
+      0000BC E2               [24]  658 	movx	a,@r0
+      0000BD 24 01            [12]  659 	add	a,#0x01
+      0000BF FA               [12]  660 	mov	r2,a
+      0000C0 08               [12]  661 	inc	r0
+      0000C1 E2               [24]  662 	movx	a,@r0
+      0000C2 34 00            [12]  663 	addc	a,#0x00
+      0000C4 FB               [12]  664 	mov	r3,a
+      0000C5 08               [12]  665 	inc	r0
+      0000C6 E2               [24]  666 	movx	a,@r0
+      0000C7 FC               [12]  667 	mov	r4,a
+      0000C8 8A 82            [24]  668 	mov	dpl,r2
+      0000CA 8B 83            [24]  669 	mov	dph,r3
+      0000CC 8C F0            [24]  670 	mov	b,r4
+      0000CE 12r00r00         [24]  671 	lcall	__gptrget
+      0000D1 FA               [12]  672 	mov	r2,a
+      0000D2 BA 41 02         [24]  673 	cjne	r2,#0x41,00139$
+      0000D5 80 01            [24]  674 	sjmp	00140$
+      0000D7                        675 00139$:
+      0000D7 22               [24]  676 	ret
+      0000D8                        677 00140$:
+      0000D8 78r1D            [12]  678 	mov	r0,#_parseMAC_str_65536_57
+      0000DA E2               [24]  679 	movx	a,@r0
+      0000DB 24 02            [12]  680 	add	a,#0x02
+      0000DD FA               [12]  681 	mov	r2,a
+      0000DE 08               [12]  682 	inc	r0
+      0000DF E2               [24]  683 	movx	a,@r0
+      0000E0 34 00            [12]  684 	addc	a,#0x00
+      0000E2 FB               [12]  685 	mov	r3,a
+      0000E3 08               [12]  686 	inc	r0
+      0000E4 E2               [24]  687 	movx	a,@r0
+      0000E5 FC               [12]  688 	mov	r4,a
+      0000E6 8A 82            [24]  689 	mov	dpl,r2
+      0000E8 8B 83            [24]  690 	mov	dph,r3
+      0000EA 8C F0            [24]  691 	mov	b,r4
+      0000EC 12r00r00         [24]  692 	lcall	__gptrget
+      0000EF FA               [12]  693 	mov	r2,a
+      0000F0 BA 43 02         [24]  694 	cjne	r2,#0x43,00141$
+      0000F3 80 01            [24]  695 	sjmp	00142$
+      0000F5                        696 00141$:
+      0000F5 22               [24]  697 	ret
+      0000F6                        698 00142$:
+      0000F6 78r1D            [12]  699 	mov	r0,#_parseMAC_str_65536_57
+      0000F8 E2               [24]  700 	movx	a,@r0
+      0000F9 24 03            [12]  701 	add	a,#0x03
+      0000FB FA               [12]  702 	mov	r2,a
+      0000FC 08               [12]  703 	inc	r0
+      0000FD E2               [24]  704 	movx	a,@r0
+      0000FE 34 00            [12]  705 	addc	a,#0x00
+      000100 FB               [12]  706 	mov	r3,a
+      000101 08               [12]  707 	inc	r0
+      000102 E2               [24]  708 	movx	a,@r0
+      000103 FC               [12]  709 	mov	r4,a
+      000104 8A 82            [24]  710 	mov	dpl,r2
+      000106 8B 83            [24]  711 	mov	dph,r3
+      000108 8C F0            [24]  712 	mov	b,r4
+      00010A 12r00r00         [24]  713 	lcall	__gptrget
+      00010D FA               [12]  714 	mov	r2,a
+      00010E BA 3D 02         [24]  715 	cjne	r2,#0x3d,00143$
+      000111 80 01            [24]  716 	sjmp	00144$
+      000113                        717 00143$:
+      000113 22               [24]  718 	ret
+      000114                        719 00144$:
+                                    720 ;	main.c:44: for(unsigned char i = 0; i < 6; i++) {
+      000114 7D 00            [12]  721 	mov	r5,#0x00
+      000116                        722 00108$:
+      000116 BD 06 00         [24]  723 	cjne	r5,#0x06,00145$
+      000119                        724 00145$:
+      000119 40 01            [24]  725 	jc	00146$
+      00011B 22               [24]  726 	ret
+      00011C                        727 00146$:
+                                    728 ;	main.c:45: mac[i] = (hexCharToInt(str[4 + i*2]) << 4) + hexCharToInt(str[5 + i*2]);
+      00011C ED               [12]  729 	mov	a,r5
+      00011D 24r0C            [12]  730 	add	a,#_mac
+      00011F F9               [12]  731 	mov	r1,a
+      000120 8D 02            [24]  732 	mov	ar2,r5
+      000122 7B 00            [12]  733 	mov	r3,#0x00
+      000124 EA               [12]  734 	mov	a,r2
+      000125 2A               [12]  735 	add	a,r2
+      000126 FA               [12]  736 	mov	r2,a
+      000127 EB               [12]  737 	mov	a,r3
+      000128 33               [12]  738 	rlc	a
+      000129 FB               [12]  739 	mov	r3,a
+      00012A 74 04            [12]  740 	mov	a,#0x04
+      00012C 2A               [12]  741 	add	a,r2
+      00012D FC               [12]  742 	mov	r4,a
+      00012E E4               [12]  743 	clr	a
+      00012F 3B               [12]  744 	addc	a,r3
+      000130 FF               [12]  745 	mov	r7,a
+      000131 78r1D            [12]  746 	mov	r0,#_parseMAC_str_65536_57
+      000133 E2               [24]  747 	movx	a,@r0
+      000134 2C               [12]  748 	add	a,r4
+      000135 FC               [12]  749 	mov	r4,a
+      000136 08               [12]  750 	inc	r0
+      000137 E2               [24]  751 	movx	a,@r0
+      000138 3F               [12]  752 	addc	a,r7
+      000139 FF               [12]  753 	mov	r7,a
+      00013A 08               [12]  754 	inc	r0
+      00013B E2               [24]  755 	movx	a,@r0
+      00013C FE               [12]  756 	mov	r6,a
+      00013D 8C 82            [24]  757 	mov	dpl,r4
+      00013F 8F 83            [24]  758 	mov	dph,r7
+      000141 8E F0            [24]  759 	mov	b,r6
+      000143 12r00r00         [24]  760 	lcall	__gptrget
+      000146 F5 82            [12]  761 	mov	dpl,a
+      000148 C0 05            [24]  762 	push	ar5
+      00014A C0 03            [24]  763 	push	ar3
+      00014C C0 02            [24]  764 	push	ar2
+      00014E C0 01            [24]  765 	push	ar1
+      000150 12r00r6F         [24]  766 	lcall	_hexCharToInt
+      000153 AF 82            [24]  767 	mov	r7,dpl
+      000155 D0 01            [24]  768 	pop	ar1
+      000157 D0 02            [24]  769 	pop	ar2
+      000159 D0 03            [24]  770 	pop	ar3
+      00015B D0 05            [24]  771 	pop	ar5
+      00015D EF               [12]  772 	mov	a,r7
+      00015E C4               [12]  773 	swap	a
+      00015F 54 F0            [12]  774 	anl	a,#0xf0
+      000161 FF               [12]  775 	mov	r7,a
+      000162 74 05            [12]  776 	mov	a,#0x05
+      000164 2A               [12]  777 	add	a,r2
+      000165 FA               [12]  778 	mov	r2,a
+      000166 E4               [12]  779 	clr	a
+      000167 3B               [12]  780 	addc	a,r3
+      000168 FB               [12]  781 	mov	r3,a
+      000169 78r1D            [12]  782 	mov	r0,#_parseMAC_str_65536_57
+      00016B E2               [24]  783 	movx	a,@r0
+      00016C 2A               [12]  784 	add	a,r2
+      00016D FA               [12]  785 	mov	r2,a
+      00016E 08               [12]  786 	inc	r0
+      00016F E2               [24]  787 	movx	a,@r0
+      000170 3B               [12]  788 	addc	a,r3
+      000171 FB               [12]  789 	mov	r3,a
+      000172 08               [12]  790 	inc	r0
+      000173 E2               [24]  791 	movx	a,@r0
+      000174 FE               [12]  792 	mov	r6,a
+      000175 8A 82            [24]  793 	mov	dpl,r2
+      000177 8B 83            [24]  794 	mov	dph,r3
+      000179 8E F0            [24]  795 	mov	b,r6
+      00017B 12r00r00         [24]  796 	lcall	__gptrget
+      00017E F5 82            [12]  797 	mov	dpl,a
+      000180 C0 07            [24]  798 	push	ar7
+      000182 C0 05            [24]  799 	push	ar5
+      000184 C0 01            [24]  800 	push	ar1
+      000186 12r00r6F         [24]  801 	lcall	_hexCharToInt
+      000189 AE 82            [24]  802 	mov	r6,dpl
+      00018B D0 01            [24]  803 	pop	ar1
+      00018D D0 05            [24]  804 	pop	ar5
+      00018F D0 07            [24]  805 	pop	ar7
+      000191 EE               [12]  806 	mov	a,r6
+      000192 2F               [12]  807 	add	a,r7
+      000193 F3               [24]  808 	movx	@r1,a
+                                    809 ;	main.c:44: for(unsigned char i = 0; i < 6; i++) {
+      000194 0D               [12]  810 	inc	r5
+                                    811 ;	main.c:48: }
+      000195 02r01r16         [24]  812 	ljmp	00108$
+                                    813 ;------------------------------------------------------------
+                                    814 ;Allocation info for local variables in function 'extractAndAssign'
+                                    815 ;------------------------------------------------------------
+                                    816 ;sloc0                     Allocated with name '_extractAndAssign_sloc0_1_0'
+                                    817 ;------------------------------------------------------------
+                                    818 ;	main.c:50: void extractAndAssign(char *arr)
+                                    819 ;	-----------------------------------------
+                                    820 ;	 function extractAndAssign
+                                    821 ;	-----------------------------------------
+      000198                        822 _extractAndAssign:
+      000198 AD 82            [24]  823 	mov	r5,dpl
+      00019A AE 83            [24]  824 	mov	r6,dph
+      00019C AF F0            [24]  825 	mov	r7,b
+                                    826 ;	main.c:52: unsigned char *curr_address = NULL;
+      00019E 78r23            [12]  827 	mov	r0,#_extractAndAssign_curr_address_65536_63
+      0001A0 E4               [12]  828 	clr	a
+      0001A1 F2               [24]  829 	movx	@r0,a
+      0001A2 08               [12]  830 	inc	r0
+      0001A3 F2               [24]  831 	movx	@r0,a
+      0001A4 08               [12]  832 	inc	r0
+      0001A5 F2               [24]  833 	movx	@r0,a
+                                    834 ;	main.c:53: unsigned char octet = 0;
+      0001A6 78r26            [12]  835 	mov	r0,#_extractAndAssign_octet_65536_63
+      0001A8 F2               [24]  836 	movx	@r0,a
+                                    837 ;	main.c:56: while (*arr)
+      0001A9                        838 00128$:
+      0001A9 8D 82            [24]  839 	mov	dpl,r5
+      0001AB 8E 83            [24]  840 	mov	dph,r6
+      0001AD 8F F0            [24]  841 	mov	b,r7
+      0001AF 12r00r00         [24]  842 	lcall	__gptrget
+      0001B2 FB               [12]  843 	mov	r3,a
+      0001B3 70 01            [24]  844 	jnz	00234$
+      0001B5 22               [24]  845 	ret
+      0001B6                        846 00234$:
+                                    847 ;	main.c:58: if (arr[0] == 'I' && arr[1] == 'P' && arr[2] == '=')
+      0001B6 BB 49 42         [24]  848 	cjne	r3,#0x49,00114$
+      0001B9 74 01            [12]  849 	mov	a,#0x01
+      0001BB 2D               [12]  850 	add	a,r5
+      0001BC FA               [12]  851 	mov	r2,a
+      0001BD E4               [12]  852 	clr	a
+      0001BE 3E               [12]  853 	addc	a,r6
+      0001BF FB               [12]  854 	mov	r3,a
+      0001C0 8F 04            [24]  855 	mov	ar4,r7
+      0001C2 8A 82            [24]  856 	mov	dpl,r2
+      0001C4 8B 83            [24]  857 	mov	dph,r3
+      0001C6 8C F0            [24]  858 	mov	b,r4
+      0001C8 12r00r00         [24]  859 	lcall	__gptrget
+      0001CB FA               [12]  860 	mov	r2,a
+      0001CC BA 50 2C         [24]  861 	cjne	r2,#0x50,00114$
+      0001CF 74 02            [12]  862 	mov	a,#0x02
+      0001D1 2D               [12]  863 	add	a,r5
+      0001D2 FA               [12]  864 	mov	r2,a
+      0001D3 E4               [12]  865 	clr	a
+      0001D4 3E               [12]  866 	addc	a,r6
+      0001D5 FB               [12]  867 	mov	r3,a
+      0001D6 8F 04            [24]  868 	mov	ar4,r7
+      0001D8 8A 82            [24]  869 	mov	dpl,r2
+      0001DA 8B 83            [24]  870 	mov	dph,r3
+      0001DC 8C F0            [24]  871 	mov	b,r4
+      0001DE 12r00r00         [24]  872 	lcall	__gptrget
+      0001E1 FA               [12]  873 	mov	r2,a
+      0001E2 BA 3D 16         [24]  874 	cjne	r2,#0x3d,00114$
+                                    875 ;	main.c:60: curr_address = ip;
+      0001E5 78r23            [12]  876 	mov	r0,#_extractAndAssign_curr_address_65536_63
+      0001E7 74r08            [12]  877 	mov	a,#_ip
+      0001E9 F2               [24]  878 	movx	@r0,a
+      0001EA 08               [12]  879 	inc	r0
+      0001EB E4               [12]  880 	clr	a
+      0001EC F2               [24]  881 	movx	@r0,a
+      0001ED 08               [12]  882 	inc	r0
+      0001EE 74 60            [12]  883 	mov	a,#0x60
+      0001F0 F2               [24]  884 	movx	@r0,a
+                                    885 ;	main.c:61: arr += 3;
+      0001F1 74 03            [12]  886 	mov	a,#0x03
+      0001F3 2D               [12]  887 	add	a,r5
+      0001F4 FD               [12]  888 	mov	r5,a
+      0001F5 E4               [12]  889 	clr	a
+      0001F6 3E               [12]  890 	addc	a,r6
+      0001F7 FE               [12]  891 	mov	r6,a
+      0001F8 02r02rDD         [24]  892 	ljmp	00115$
+      0001FB                        893 00114$:
+                                    894 ;	main.c:63: else if (arr[0] == 'S' && arr[1] == 'U' && arr[2] == 'B' && arr[3] == '=')
+      0001FB 8D 82            [24]  895 	mov	dpl,r5
+      0001FD 8E 83            [24]  896 	mov	dph,r6
+      0001FF 8F F0            [24]  897 	mov	b,r7
+      000201 12r00r00         [24]  898 	lcall	__gptrget
+      000204 FB               [12]  899 	mov	r3,a
+      000205 BB 53 58         [24]  900 	cjne	r3,#0x53,00108$
+      000208 74 01            [12]  901 	mov	a,#0x01
+      00020A 2D               [12]  902 	add	a,r5
+      00020B FA               [12]  903 	mov	r2,a
+      00020C E4               [12]  904 	clr	a
+      00020D 3E               [12]  905 	addc	a,r6
+      00020E FB               [12]  906 	mov	r3,a
+      00020F 8F 04            [24]  907 	mov	ar4,r7
+      000211 8A 82            [24]  908 	mov	dpl,r2
+      000213 8B 83            [24]  909 	mov	dph,r3
+      000215 8C F0            [24]  910 	mov	b,r4
+      000217 12r00r00         [24]  911 	lcall	__gptrget
+      00021A FA               [12]  912 	mov	r2,a
+      00021B BA 55 42         [24]  913 	cjne	r2,#0x55,00108$
+      00021E 74 02            [12]  914 	mov	a,#0x02
+      000220 2D               [12]  915 	add	a,r5
+      000221 FA               [12]  916 	mov	r2,a
+      000222 E4               [12]  917 	clr	a
+      000223 3E               [12]  918 	addc	a,r6
+      000224 FB               [12]  919 	mov	r3,a
+      000225 8F 04            [24]  920 	mov	ar4,r7
+      000227 8A 82            [24]  921 	mov	dpl,r2
+      000229 8B 83            [24]  922 	mov	dph,r3
+      00022B 8C F0            [24]  923 	mov	b,r4
+      00022D 12r00r00         [24]  924 	lcall	__gptrget
+      000230 FA               [12]  925 	mov	r2,a
+      000231 BA 42 2C         [24]  926 	cjne	r2,#0x42,00108$
+      000234 74 03            [12]  927 	mov	a,#0x03
+      000236 2D               [12]  928 	add	a,r5
+      000237 FA               [12]  929 	mov	r2,a
+      000238 E4               [12]  930 	clr	a
+      000239 3E               [12]  931 	addc	a,r6
+      00023A FB               [12]  932 	mov	r3,a
+      00023B 8F 04            [24]  933 	mov	ar4,r7
+      00023D 8A 82            [24]  934 	mov	dpl,r2
+      00023F 8B 83            [24]  935 	mov	dph,r3
+      000241 8C F0            [24]  936 	mov	b,r4
+      000243 12r00r00         [24]  937 	lcall	__gptrget
+      000246 FA               [12]  938 	mov	r2,a
+      000247 BA 3D 16         [24]  939 	cjne	r2,#0x3d,00108$
+                                    940 ;	main.c:65: curr_address = subnet;
+      00024A 78r23            [12]  941 	mov	r0,#_extractAndAssign_curr_address_65536_63
+      00024C 74r04            [12]  942 	mov	a,#_subnet
+      00024E F2               [24]  943 	movx	@r0,a
+      00024F 08               [12]  944 	inc	r0
+      000250 E4               [12]  945 	clr	a
+      000251 F2               [24]  946 	movx	@r0,a
+      000252 08               [12]  947 	inc	r0
+      000253 74 60            [12]  948 	mov	a,#0x60
+      000255 F2               [24]  949 	movx	@r0,a
+                                    950 ;	main.c:66: arr += 4;
+      000256 74 04            [12]  951 	mov	a,#0x04
+      000258 2D               [12]  952 	add	a,r5
+      000259 FD               [12]  953 	mov	r5,a
+      00025A E4               [12]  954 	clr	a
+      00025B 3E               [12]  955 	addc	a,r6
+      00025C FE               [12]  956 	mov	r6,a
+      00025D 02r02rDD         [24]  957 	ljmp	00115$
+      000260                        958 00108$:
+                                    959 ;	main.c:68: else if (arr[0] == 'G' && arr[1] == 'A' && arr[2] == 'T' && arr[3] == 'E' && arr[4] == '=')
+      000260 8D 82            [24]  960 	mov	dpl,r5
+      000262 8E 83            [24]  961 	mov	dph,r6
+      000264 8F F0            [24]  962 	mov	b,r7
+      000266 12r00r00         [24]  963 	lcall	__gptrget
+      000269 FB               [12]  964 	mov	r3,a
+      00026A BB 47 02         [24]  965 	cjne	r3,#0x47,00249$
+      00026D 80 03            [24]  966 	sjmp	00250$
+      00026F                        967 00249$:
+      00026F 02r02rDD         [24]  968 	ljmp	00115$
+      000272                        969 00250$:
+      000272 74 01            [12]  970 	mov	a,#0x01
+      000274 2D               [12]  971 	add	a,r5
+      000275 FA               [12]  972 	mov	r2,a
+      000276 E4               [12]  973 	clr	a
+      000277 3E               [12]  974 	addc	a,r6
+      000278 FB               [12]  975 	mov	r3,a
+      000279 8F 04            [24]  976 	mov	ar4,r7
+      00027B 8A 82            [24]  977 	mov	dpl,r2
+      00027D 8B 83            [24]  978 	mov	dph,r3
+      00027F 8C F0            [24]  979 	mov	b,r4
+      000281 12r00r00         [24]  980 	lcall	__gptrget
+      000284 FA               [12]  981 	mov	r2,a
+      000285 BA 41 55         [24]  982 	cjne	r2,#0x41,00115$
+      000288 74 02            [12]  983 	mov	a,#0x02
+      00028A 2D               [12]  984 	add	a,r5
+      00028B FA               [12]  985 	mov	r2,a
+      00028C E4               [12]  986 	clr	a
+      00028D 3E               [12]  987 	addc	a,r6
+      00028E FB               [12]  988 	mov	r3,a
+      00028F 8F 04            [24]  989 	mov	ar4,r7
+      000291 8A 82            [24]  990 	mov	dpl,r2
+      000293 8B 83            [24]  991 	mov	dph,r3
+      000295 8C F0            [24]  992 	mov	b,r4
+      000297 12r00r00         [24]  993 	lcall	__gptrget
+      00029A FA               [12]  994 	mov	r2,a
+      00029B BA 54 3F         [24]  995 	cjne	r2,#0x54,00115$
+      00029E 74 03            [12]  996 	mov	a,#0x03
+      0002A0 2D               [12]  997 	add	a,r5
+      0002A1 FA               [12]  998 	mov	r2,a
+      0002A2 E4               [12]  999 	clr	a
+      0002A3 3E               [12] 1000 	addc	a,r6
+      0002A4 FB               [12] 1001 	mov	r3,a
+      0002A5 8F 04            [24] 1002 	mov	ar4,r7
+      0002A7 8A 82            [24] 1003 	mov	dpl,r2
+      0002A9 8B 83            [24] 1004 	mov	dph,r3
+      0002AB 8C F0            [24] 1005 	mov	b,r4
+      0002AD 12r00r00         [24] 1006 	lcall	__gptrget
+      0002B0 FA               [12] 1007 	mov	r2,a
+      0002B1 BA 45 29         [24] 1008 	cjne	r2,#0x45,00115$
+      0002B4 74 04            [12] 1009 	mov	a,#0x04
+      0002B6 2D               [12] 1010 	add	a,r5
+      0002B7 FA               [12] 1011 	mov	r2,a
+      0002B8 E4               [12] 1012 	clr	a
+      0002B9 3E               [12] 1013 	addc	a,r6
+      0002BA FB               [12] 1014 	mov	r3,a
+      0002BB 8F 04            [24] 1015 	mov	ar4,r7
+      0002BD 8A 82            [24] 1016 	mov	dpl,r2
+      0002BF 8B 83            [24] 1017 	mov	dph,r3
+      0002C1 8C F0            [24] 1018 	mov	b,r4
+      0002C3 12r00r00         [24] 1019 	lcall	__gptrget
+      0002C6 FA               [12] 1020 	mov	r2,a
+      0002C7 BA 3D 13         [24] 1021 	cjne	r2,#0x3d,00115$
+                                   1022 ;	main.c:70: curr_address = gateway;
+      0002CA 78r23            [12] 1023 	mov	r0,#_extractAndAssign_curr_address_65536_63
+      0002CC 74r00            [12] 1024 	mov	a,#_gateway
+      0002CE F2               [24] 1025 	movx	@r0,a
+      0002CF 08               [12] 1026 	inc	r0
+      0002D0 E4               [12] 1027 	clr	a
+      0002D1 F2               [24] 1028 	movx	@r0,a
+      0002D2 08               [12] 1029 	inc	r0
+      0002D3 74 60            [12] 1030 	mov	a,#0x60
+      0002D5 F2               [24] 1031 	movx	@r0,a
+                                   1032 ;	main.c:71: arr += 5;
+      0002D6 74 05            [12] 1033 	mov	a,#0x05
+      0002D8 2D               [12] 1034 	add	a,r5
+      0002D9 FD               [12] 1035 	mov	r5,a
+      0002DA E4               [12] 1036 	clr	a
+      0002DB 3E               [12] 1037 	addc	a,r6
+      0002DC FE               [12] 1038 	mov	r6,a
+      0002DD                       1039 00115$:
+                                   1040 ;	main.c:73: value = 0;
+      0002DD 78r27            [12] 1041 	mov	r0,#_extractAndAssign_value_65536_63
+      0002DF E4               [12] 1042 	clr	a
+      0002E0 F2               [24] 1043 	movx	@r0,a
+                                   1044 ;	main.c:74: while (*arr >= '0' && *arr <= '9')
+      0002E1 8D*00            [24] 1045 	mov	_extractAndAssign_sloc0_1_0,r5
+      0002E3 8E*01            [24] 1046 	mov	(_extractAndAssign_sloc0_1_0 + 1),r6
+      0002E5 8F*02            [24] 1047 	mov	(_extractAndAssign_sloc0_1_0 + 2),r7
+      0002E7                       1048 00119$:
+      0002E7 85*00 82         [24] 1049 	mov	dpl,_extractAndAssign_sloc0_1_0
+      0002EA 85*01 83         [24] 1050 	mov	dph,(_extractAndAssign_sloc0_1_0 + 1)
+      0002ED 85*02 F0         [24] 1051 	mov	b,(_extractAndAssign_sloc0_1_0 + 2)
+      0002F0 12r00r00         [24] 1052 	lcall	__gptrget
+      0002F3 FA               [12] 1053 	mov	r2,a
+      0002F4 BA 30 00         [24] 1054 	cjne	r2,#0x30,00259$
+      0002F7                       1055 00259$:
+      0002F7 40 1E            [24] 1056 	jc	00153$
+      0002F9 EA               [12] 1057 	mov	a,r2
+      0002FA 24 C6            [12] 1058 	add	a,#0xff - 0x39
+      0002FC 40 19            [24] 1059 	jc	00153$
+                                   1060 ;	main.c:76: value = value * 10 + (*arr - '0');
+      0002FE 78r27            [12] 1061 	mov	r0,#_extractAndAssign_value_65536_63
+      000300 E2               [24] 1062 	movx	a,@r0
+      000301 75 F0 0A         [24] 1063 	mov	b,#0x0a
+      000304 A4               [48] 1064 	mul	ab
+      000305 FC               [12] 1065 	mov	r4,a
+      000306 EA               [12] 1066 	mov	a,r2
+      000307 24 D0            [12] 1067 	add	a,#0xd0
+      000309 78r27            [12] 1068 	mov	r0,#_extractAndAssign_value_65536_63
+      00030B 2C               [12] 1069 	add	a,r4
+      00030C F2               [24] 1070 	movx	@r0,a
+                                   1071 ;	main.c:77: arr++;
+      00030D 05*00            [12] 1072 	inc	_extractAndAssign_sloc0_1_0
+      00030F E4               [12] 1073 	clr	a
+      000310 B5*00 D4         [24] 1074 	cjne	a,_extractAndAssign_sloc0_1_0,00119$
+      000313 05*01            [12] 1075 	inc	(_extractAndAssign_sloc0_1_0 + 1)
+      000315 80 D0            [24] 1076 	sjmp	00119$
+      000317                       1077 00153$:
+      000317 78r20            [12] 1078 	mov	r0,#_extractAndAssign_arr_65536_62
+      000319 E5*00            [12] 1079 	mov	a,_extractAndAssign_sloc0_1_0
+      00031B F2               [24] 1080 	movx	@r0,a
+      00031C 08               [12] 1081 	inc	r0
+      00031D E5*01            [12] 1082 	mov	a,(_extractAndAssign_sloc0_1_0 + 1)
+      00031F F2               [24] 1083 	movx	@r0,a
+      000320 08               [12] 1084 	inc	r0
+      000321 E5*02            [12] 1085 	mov	a,(_extractAndAssign_sloc0_1_0 + 2)
+      000323 F2               [24] 1086 	movx	@r0,a
+                                   1087 ;	main.c:80: if (curr_address && octet < 4)
+      000324 78r23            [12] 1088 	mov	r0,#_extractAndAssign_curr_address_65536_63
+      000326 E2               [24] 1089 	movx	a,@r0
+      000327 F5 F0            [12] 1090 	mov	b,a
+      000329 08               [12] 1091 	inc	r0
+      00032A E2               [24] 1092 	movx	a,@r0
+      00032B 45 F0            [12] 1093 	orl	a,b
+      00032D 60 4F            [24] 1094 	jz	00126$
+      00032F 78r26            [12] 1095 	mov	r0,#_extractAndAssign_octet_65536_63
+      000331 E2               [24] 1096 	movx	a,@r0
+      000332 B4 04 00         [24] 1097 	cjne	a,#0x04,00264$
+      000335                       1098 00264$:
+      000335 50 47            [24] 1099 	jnc	00126$
+                                   1100 ;	main.c:82: curr_address[octet] = value;
+      000337 78r23            [12] 1101 	mov	r0,#_extractAndAssign_curr_address_65536_63
+      000339 79r26            [12] 1102 	mov	r1,#_extractAndAssign_octet_65536_63
+      00033B E3               [24] 1103 	movx	a,@r1
+      00033C C5 F0            [12] 1104 	xch	a,b
+      00033E E2               [24] 1105 	movx	a,@r0
+      00033F 25 F0            [12] 1106 	add	a,b
+      000341 FA               [12] 1107 	mov	r2,a
+      000342 08               [12] 1108 	inc	r0
+      000343 E2               [24] 1109 	movx	a,@r0
+      000344 34 00            [12] 1110 	addc	a,#0x00
+      000346 FB               [12] 1111 	mov	r3,a
+      000347 08               [12] 1112 	inc	r0
+      000348 E2               [24] 1113 	movx	a,@r0
+      000349 FC               [12] 1114 	mov	r4,a
+      00034A 8A 82            [24] 1115 	mov	dpl,r2
+      00034C 8B 83            [24] 1116 	mov	dph,r3
+      00034E 8C F0            [24] 1117 	mov	b,r4
+      000350 78r27            [12] 1118 	mov	r0,#_extractAndAssign_value_65536_63
+      000352 E2               [24] 1119 	movx	a,@r0
+      000353 12r00r00         [24] 1120 	lcall	__gptrput
+                                   1121 ;	main.c:83: octet++;
+      000356 78r26            [12] 1122 	mov	r0,#_extractAndAssign_octet_65536_63
+      000358 E2               [24] 1123 	movx	a,@r0
+      000359 24 01            [12] 1124 	add	a,#0x01
+      00035B F2               [24] 1125 	movx	@r0,a
+                                   1126 ;	main.c:85: if (*arr == '.')
+      00035C 85*00 82         [24] 1127 	mov	dpl,_extractAndAssign_sloc0_1_0
+      00035F 85*01 83         [24] 1128 	mov	dph,(_extractAndAssign_sloc0_1_0 + 1)
+      000362 85*02 F0         [24] 1129 	mov	b,(_extractAndAssign_sloc0_1_0 + 2)
+      000365 12r00r00         [24] 1130 	lcall	__gptrget
+      000368 FC               [12] 1131 	mov	r4,a
+      000369 BC 2E 0E         [24] 1132 	cjne	r4,#0x2e,00123$
+                                   1133 ;	main.c:87: arr++;
+      00036C 74 01            [12] 1134 	mov	a,#0x01
+      00036E 25*00            [12] 1135 	add	a,_extractAndAssign_sloc0_1_0
+      000370 FD               [12] 1136 	mov	r5,a
+      000371 E4               [12] 1137 	clr	a
+      000372 35*01            [12] 1138 	addc	a,(_extractAndAssign_sloc0_1_0 + 1)
+      000374 FE               [12] 1139 	mov	r6,a
+      000375 AF*02            [24] 1140 	mov	r7,(_extractAndAssign_sloc0_1_0 + 2)
+                                   1141 ;	main.c:88: continue;
+      000377 02r01rA9         [24] 1142 	ljmp	00128$
+      00037A                       1143 00123$:
+                                   1144 ;	main.c:92: octet = 0; // Reset octet count for the next IP address
+      00037A 78r26            [12] 1145 	mov	r0,#_extractAndAssign_octet_65536_63
+      00037C E4               [12] 1146 	clr	a
+      00037D F2               [24] 1147 	movx	@r0,a
+      00037E                       1148 00126$:
+                                   1149 ;	main.c:95: arr++;
+      00037E 78r20            [12] 1150 	mov	r0,#_extractAndAssign_arr_65536_62
+      000380 E2               [24] 1151 	movx	a,@r0
+      000381 24 01            [12] 1152 	add	a,#0x01
+      000383 FD               [12] 1153 	mov	r5,a
+      000384 08               [12] 1154 	inc	r0
+      000385 E2               [24] 1155 	movx	a,@r0
+      000386 34 00            [12] 1156 	addc	a,#0x00
+      000388 FE               [12] 1157 	mov	r6,a
+      000389 08               [12] 1158 	inc	r0
+      00038A E2               [24] 1159 	movx	a,@r0
+      00038B FF               [12] 1160 	mov	r7,a
+                                   1161 ;	main.c:97: }
+      00038C 02r01rA9         [24] 1162 	ljmp	00128$
+                                   1163 ;------------------------------------------------------------
+                                   1164 ;Allocation info for local variables in function 'displayIPAddress'
+                                   1165 ;------------------------------------------------------------
+                                   1166 ;	main.c:101: void displayIPAddress(unsigned char *address)
+                                   1167 ;	-----------------------------------------
+                                   1168 ;	 function displayIPAddress
+                                   1169 ;	-----------------------------------------
+      00038F                       1170 _displayIPAddress:
+      00038F AD 82            [24] 1171 	mov	r5,dpl
+      000391 AE 83            [24] 1172 	mov	r6,dph
+      000393 AF F0            [24] 1173 	mov	r7,b
+                                   1174 ;	main.c:103: for (unsigned char i = 0; i < 4; i++)
+      000395 7C 00            [12] 1175 	mov	r4,#0x00
+      000397                       1176 00105$:
+      000397 BC 04 00         [24] 1177 	cjne	r4,#0x04,00122$
+      00039A                       1178 00122$:
+      00039A 50 44            [24] 1179 	jnc	00107$
+                                   1180 ;	main.c:105: _serial_putbyte_dec(address[i]);
+      00039C EC               [12] 1181 	mov	a,r4
+      00039D 2D               [12] 1182 	add	a,r5
+      00039E F9               [12] 1183 	mov	r1,a
+      00039F E4               [12] 1184 	clr	a
+      0003A0 3E               [12] 1185 	addc	a,r6
+      0003A1 FA               [12] 1186 	mov	r2,a
+      0003A2 8F 03            [24] 1187 	mov	ar3,r7
+      0003A4 89 82            [24] 1188 	mov	dpl,r1
+      0003A6 8A 83            [24] 1189 	mov	dph,r2
+      0003A8 8B F0            [24] 1190 	mov	b,r3
+      0003AA 12r00r00         [24] 1191 	lcall	__gptrget
+      0003AD F5 82            [12] 1192 	mov	dpl,a
+      0003AF C0 07            [24] 1193 	push	ar7
+      0003B1 C0 06            [24] 1194 	push	ar6
+      0003B3 C0 05            [24] 1195 	push	ar5
+      0003B5 C0 04            [24] 1196 	push	ar4
+      0003B7 12r00r00         [24] 1197 	lcall	__serial_putbyte_dec
+      0003BA D0 04            [24] 1198 	pop	ar4
+      0003BC D0 05            [24] 1199 	pop	ar5
+      0003BE D0 06            [24] 1200 	pop	ar6
+      0003C0 D0 07            [24] 1201 	pop	ar7
+                                   1202 ;	main.c:106: if (i != 3)
+      0003C2 BC 03 02         [24] 1203 	cjne	r4,#0x03,00124$
+      0003C5 80 16            [24] 1204 	sjmp	00106$
+      0003C7                       1205 00124$:
+                                   1206 ;	main.c:107: _serial_putchar('.');
+      0003C7 75 82 2E         [24] 1207 	mov	dpl,#0x2e
+      0003CA C0 07            [24] 1208 	push	ar7
+      0003CC C0 06            [24] 1209 	push	ar6
+      0003CE C0 05            [24] 1210 	push	ar5
+      0003D0 C0 04            [24] 1211 	push	ar4
+      0003D2 12r00r00         [24] 1212 	lcall	__serial_putchar
+      0003D5 D0 04            [24] 1213 	pop	ar4
+      0003D7 D0 05            [24] 1214 	pop	ar5
+      0003D9 D0 06            [24] 1215 	pop	ar6
+      0003DB D0 07            [24] 1216 	pop	ar7
+      0003DD                       1217 00106$:
+                                   1218 ;	main.c:103: for (unsigned char i = 0; i < 4; i++)
+      0003DD 0C               [12] 1219 	inc	r4
+      0003DE 80 B7            [24] 1220 	sjmp	00105$
+      0003E0                       1221 00107$:
+                                   1222 ;	main.c:109: }
+      0003E0 22               [24] 1223 	ret
+                                   1224 ;------------------------------------------------------------
+                                   1225 ;Allocation info for local variables in function 'displayMACAddress'
+                                   1226 ;------------------------------------------------------------
+                                   1227 ;	main.c:112: void displayMACAddress(unsigned char *address)
+                                   1228 ;	-----------------------------------------
+                                   1229 ;	 function displayMACAddress
+                                   1230 ;	-----------------------------------------
+      0003E1                       1231 _displayMACAddress:
+      0003E1 AD 82            [24] 1232 	mov	r5,dpl
+      0003E3 AE 83            [24] 1233 	mov	r6,dph
+      0003E5 AF F0            [24] 1234 	mov	r7,b
+                                   1235 ;	main.c:114: for (unsigned char i = 0; i < 6; i++)
+      0003E7 7C 00            [12] 1236 	mov	r4,#0x00
+      0003E9                       1237 00105$:
+      0003E9 BC 06 00         [24] 1238 	cjne	r4,#0x06,00122$
+      0003EC                       1239 00122$:
+      0003EC 50 47            [24] 1240 	jnc	00107$
+                                   1241 ;	main.c:116: _serial_putbyte_hex(address[i]);
+      0003EE EC               [12] 1242 	mov	a,r4
+      0003EF 2D               [12] 1243 	add	a,r5
+      0003F0 F9               [12] 1244 	mov	r1,a
+      0003F1 E4               [12] 1245 	clr	a
+      0003F2 3E               [12] 1246 	addc	a,r6
+      0003F3 FA               [12] 1247 	mov	r2,a
+      0003F4 8F 03            [24] 1248 	mov	ar3,r7
+      0003F6 89 82            [24] 1249 	mov	dpl,r1
+      0003F8 8A 83            [24] 1250 	mov	dph,r2
+      0003FA 8B F0            [24] 1251 	mov	b,r3
+      0003FC 12r00r00         [24] 1252 	lcall	__gptrget
+      0003FF F5 82            [12] 1253 	mov	dpl,a
+      000401 C0 07            [24] 1254 	push	ar7
+      000403 C0 06            [24] 1255 	push	ar6
+      000405 C0 05            [24] 1256 	push	ar5
+      000407 C0 04            [24] 1257 	push	ar4
+      000409 12r00r00         [24] 1258 	lcall	__serial_putbyte_hex
+      00040C D0 04            [24] 1259 	pop	ar4
+      00040E D0 05            [24] 1260 	pop	ar5
+      000410 D0 06            [24] 1261 	pop	ar6
+      000412 D0 07            [24] 1262 	pop	ar7
+                                   1263 ;	main.c:117: if (i != 5)
+      000414 BC 05 02         [24] 1264 	cjne	r4,#0x05,00124$
+      000417 80 19            [24] 1265 	sjmp	00106$
+      000419                       1266 00124$:
+                                   1267 ;	main.c:118: _serial_putstr(" ");
+      000419 90r00r00         [24] 1268 	mov	dptr,#___str_0
+      00041C 75 F0 80         [24] 1269 	mov	b,#0x80
+      00041F C0 07            [24] 1270 	push	ar7
+      000421 C0 06            [24] 1271 	push	ar6
+      000423 C0 05            [24] 1272 	push	ar5
+      000425 C0 04            [24] 1273 	push	ar4
+      000427 12r00r00         [24] 1274 	lcall	__serial_putstr
+      00042A D0 04            [24] 1275 	pop	ar4
+      00042C D0 05            [24] 1276 	pop	ar5
+      00042E D0 06            [24] 1277 	pop	ar6
+      000430 D0 07            [24] 1278 	pop	ar7
+      000432                       1279 00106$:
+                                   1280 ;	main.c:114: for (unsigned char i = 0; i < 6; i++)
+      000432 0C               [12] 1281 	inc	r4
+      000433 80 B4            [24] 1282 	sjmp	00105$
+      000435                       1283 00107$:
+                                   1284 ;	main.c:120: }
+      000435 22               [24] 1285 	ret
+                                   1286 ;------------------------------------------------------------
+                                   1287 ;Allocation info for local variables in function 'menudisplay'
+                                   1288 ;------------------------------------------------------------
+                                   1289 ;	main.c:124: void menudisplay()
+                                   1290 ;	-----------------------------------------
+                                   1291 ;	 function menudisplay
+                                   1292 ;	-----------------------------------------
+      000436                       1293 _menudisplay:
+                                   1294 ;	main.c:128: _serial_putstr("\n\rCURRENT CONFIG:                    CHANGE CMD:\n\r");
+      000436 90r00r02         [24] 1295 	mov	dptr,#___str_1
+      000439 75 F0 80         [24] 1296 	mov	b,#0x80
+      00043C 12r00r00         [24] 1297 	lcall	__serial_putstr
+                                   1298 ;	main.c:129: _serial_putstr("RTU Addr (0-9): ");
+      00043F 90r00r35         [24] 1299 	mov	dptr,#___str_2
+      000442 75 F0 80         [24] 1300 	mov	b,#0x80
+      000445 12r00r00         [24] 1301 	lcall	__serial_putstr
+                                   1302 ;	main.c:130: _serial_putchar(RTU_Address);
+      000448 78r16            [12] 1303 	mov	r0,#_RTU_Address
+      00044A E2               [24] 1304 	movx	a,@r0
+      00044B F5 82            [12] 1305 	mov	dpl,a
+      00044D 12r00r00         [24] 1306 	lcall	__serial_putchar
+                                   1307 ;	main.c:131: _serial_putstr("                  RTU=#\n\r");
+      000450 90r00r46         [24] 1308 	mov	dptr,#___str_3
+      000453 75 F0 80         [24] 1309 	mov	b,#0x80
+      000456 12r00r00         [24] 1310 	lcall	__serial_putstr
+                                   1311 ;	main.c:134: _serial_putstr("IP Addr: ");
+      000459 90r00r60         [24] 1312 	mov	dptr,#___str_4
+      00045C 75 F0 80         [24] 1313 	mov	b,#0x80
+      00045F 12r00r00         [24] 1314 	lcall	__serial_putstr
+                                   1315 ;	main.c:135: displayIPAddress(ip);
+      000462 90r00r08         [24] 1316 	mov	dptr,#_ip
+      000465 75 F0 60         [24] 1317 	mov	b,#0x60
+      000468 12r03r8F         [24] 1318 	lcall	_displayIPAddress
+                                   1319 ;	main.c:136: _serial_putstr("             IP=###.###.###.###\n\r");
+      00046B 90r00r6A         [24] 1320 	mov	dptr,#___str_5
+      00046E 75 F0 80         [24] 1321 	mov	b,#0x80
+      000471 12r00r00         [24] 1322 	lcall	__serial_putstr
+                                   1323 ;	main.c:139: _serial_putstr("Subnet Mask: ");
+      000474 90r00r8C         [24] 1324 	mov	dptr,#___str_6
+      000477 75 F0 80         [24] 1325 	mov	b,#0x80
+      00047A 12r00r00         [24] 1326 	lcall	__serial_putstr
+                                   1327 ;	main.c:140: displayIPAddress(subnet);
+      00047D 90r00r04         [24] 1328 	mov	dptr,#_subnet
+      000480 75 F0 60         [24] 1329 	mov	b,#0x60
+      000483 12r03r8F         [24] 1330 	lcall	_displayIPAddress
+                                   1331 ;	main.c:141: _serial_putstr("         SUB=###.###.###.###\n\r");
+      000486 90r00r9A         [24] 1332 	mov	dptr,#___str_7
+      000489 75 F0 80         [24] 1333 	mov	b,#0x80
+      00048C 12r00r00         [24] 1334 	lcall	__serial_putstr
+                                   1335 ;	main.c:144: _serial_putstr("Gateway: ");
+      00048F 90r00rB9         [24] 1336 	mov	dptr,#___str_8
+      000492 75 F0 80         [24] 1337 	mov	b,#0x80
+      000495 12r00r00         [24] 1338 	lcall	__serial_putstr
+                                   1339 ;	main.c:145: displayIPAddress(gateway);
+      000498 90r00r00         [24] 1340 	mov	dptr,#_gateway
+      00049B 75 F0 60         [24] 1341 	mov	b,#0x60
+      00049E 12r03r8F         [24] 1342 	lcall	_displayIPAddress
+                                   1343 ;	main.c:146: _serial_putstr("              GATE=###.###.###.###\n\r");
+      0004A1 90r00rC3         [24] 1344 	mov	dptr,#___str_9
+      0004A4 75 F0 80         [24] 1345 	mov	b,#0x80
+      0004A7 12r00r00         [24] 1346 	lcall	__serial_putstr
+                                   1347 ;	main.c:149: _serial_putstr("MAC Addr: ");
+      0004AA 90r00rE8         [24] 1348 	mov	dptr,#___str_10
+      0004AD 75 F0 80         [24] 1349 	mov	b,#0x80
+      0004B0 12r00r00         [24] 1350 	lcall	__serial_putstr
+                                   1351 ;	main.c:150: displayMACAddress(mac);
+      0004B3 90r00r0C         [24] 1352 	mov	dptr,#_mac
+      0004B6 75 F0 60         [24] 1353 	mov	b,#0x60
+      0004B9 12r03rE1         [24] 1354 	lcall	_displayMACAddress
+                                   1355 ;	main.c:151: _serial_putstr("        MAC=FF FF FF FF FF FF\n\r");
+      0004BC 90r00rF3         [24] 1356 	mov	dptr,#___str_11
+      0004BF 75 F0 80         [24] 1357 	mov	b,#0x80
+                                   1358 ;	main.c:152: }
+      0004C2 02r00r00         [24] 1359 	ljmp	__serial_putstr
+                                   1360 ;------------------------------------------------------------
+                                   1361 ;Allocation info for local variables in function 'setuptcp'
+                                   1362 ;------------------------------------------------------------
+                                   1363 ;	main.c:155: void setuptcp(){
+                                   1364 ;	-----------------------------------------
+                                   1365 ;	 function setuptcp
+                                   1366 ;	-----------------------------------------
+      0004C5                       1367 _setuptcp:
+                                   1368 ;	main.c:156: _w5500_set_tcp(SOCKET1);
+      0004C5 75 82 01         [24] 1369 	mov	dpl,#0x01
+      0004C8 12r00r00         [24] 1370 	lcall	__w5500_set_tcp
+                                   1371 ;	main.c:157: _w5500_set_sourceport(SOCKET1, 5002);
+      0004CB 78r00            [12] 1372 	mov	r0,#__w5500_set_sourceport_PARM_2
+      0004CD 74 8A            [12] 1373 	mov	a,#0x8a
+      0004CF F2               [24] 1374 	movx	@r0,a
+      0004D0 08               [12] 1375 	inc	r0
+      0004D1 74 13            [12] 1376 	mov	a,#0x13
+      0004D3 F2               [24] 1377 	movx	@r0,a
+      0004D4 75 82 01         [24] 1378 	mov	dpl,#0x01
+      0004D7 12r00r00         [24] 1379 	lcall	__w5500_set_sourceport
+                                   1380 ;	main.c:158: _w5500_open(SOCKET1);
+      0004DA 75 82 01         [24] 1381 	mov	dpl,#0x01
+      0004DD 12r00r00         [24] 1382 	lcall	__w5500_open
+                                   1383 ;	main.c:159: _w5500_listen(SOCKET1);
+      0004E0 75 82 01         [24] 1384 	mov	dpl,#0x01
+      0004E3 12r00r00         [24] 1385 	lcall	__w5500_listen
+                                   1386 ;	main.c:160: _w5500_set_IMR(SOCKET1);
+      0004E6 75 82 01         [24] 1387 	mov	dpl,#0x01
+                                   1388 ;	main.c:161: }
+      0004E9 02r00r00         [24] 1389 	ljmp	__w5500_set_IMR
+                                   1390 ;------------------------------------------------------------
+                                   1391 ;Allocation info for local variables in function 'setup'
+                                   1392 ;------------------------------------------------------------
+                                   1393 ;	main.c:164: void setup() {
+                                   1394 ;	-----------------------------------------
+                                   1395 ;	 function setup
+                                   1396 ;	-----------------------------------------
+      0004EC                       1397 _setup:
+                                   1398 ;	main.c:165: _serial_begin();
+      0004EC 12r00r00         [24] 1399 	lcall	__serial_begin
+                                   1400 ;	main.c:166: _spigeneric_reset();
+      0004EF 12r00r00         [24] 1401 	lcall	__spigeneric_reset
+                                   1402 ;	main.c:167: _w5500_set_gateway(gateway);
+      0004F2 78r00            [12] 1403 	mov	r0,#__w5500_write_PARM_3
+      0004F4 74r00            [12] 1404 	mov	a,#_gateway
+      0004F6 F2               [24] 1405 	movx	@r0,a
+      0004F7 08               [12] 1406 	inc	r0
+      0004F8 E4               [12] 1407 	clr	a
+      0004F9 F2               [24] 1408 	movx	@r0,a
+      0004FA 08               [12] 1409 	inc	r0
+      0004FB 74 60            [12] 1410 	mov	a,#0x60
+      0004FD F2               [24] 1411 	movx	@r0,a
+      0004FE 78r00            [12] 1412 	mov	r0,#__w5500_write_PARM_2
+      000500 E4               [12] 1413 	clr	a
+      000501 F2               [24] 1414 	movx	@r0,a
+      000502 78r00            [12] 1415 	mov	r0,#__w5500_write_PARM_4
+      000504 74 04            [12] 1416 	mov	a,#0x04
+      000506 F2               [24] 1417 	movx	@r0,a
+      000507 08               [12] 1418 	inc	r0
+      000508 E4               [12] 1419 	clr	a
+      000509 F2               [24] 1420 	movx	@r0,a
+      00050A 90 00 01         [24] 1421 	mov	dptr,#0x0001
+      00050D 12r00r00         [24] 1422 	lcall	__w5500_write
+                                   1423 ;	main.c:168: _w5500_set_subnet(subnet);
+      000510 78r00            [12] 1424 	mov	r0,#__w5500_write_PARM_3
+      000512 74r04            [12] 1425 	mov	a,#_subnet
+      000514 F2               [24] 1426 	movx	@r0,a
+      000515 08               [12] 1427 	inc	r0
+      000516 E4               [12] 1428 	clr	a
+      000517 F2               [24] 1429 	movx	@r0,a
+      000518 08               [12] 1430 	inc	r0
+      000519 74 60            [12] 1431 	mov	a,#0x60
+      00051B F2               [24] 1432 	movx	@r0,a
+      00051C 78r00            [12] 1433 	mov	r0,#__w5500_write_PARM_2
+      00051E E4               [12] 1434 	clr	a
+      00051F F2               [24] 1435 	movx	@r0,a
+      000520 78r00            [12] 1436 	mov	r0,#__w5500_write_PARM_4
+      000522 74 04            [12] 1437 	mov	a,#0x04
+      000524 F2               [24] 1438 	movx	@r0,a
+      000525 08               [12] 1439 	inc	r0
+      000526 E4               [12] 1440 	clr	a
+      000527 F2               [24] 1441 	movx	@r0,a
+      000528 90 00 05         [24] 1442 	mov	dptr,#0x0005
+      00052B 12r00r00         [24] 1443 	lcall	__w5500_write
+                                   1444 ;	main.c:169: _w5500_set_ip(ip);
+      00052E 78r00            [12] 1445 	mov	r0,#__w5500_write_PARM_3
+      000530 74r08            [12] 1446 	mov	a,#_ip
+      000532 F2               [24] 1447 	movx	@r0,a
+      000533 08               [12] 1448 	inc	r0
+      000534 E4               [12] 1449 	clr	a
+      000535 F2               [24] 1450 	movx	@r0,a
+      000536 08               [12] 1451 	inc	r0
+      000537 74 60            [12] 1452 	mov	a,#0x60
+      000539 F2               [24] 1453 	movx	@r0,a
+      00053A 78r00            [12] 1454 	mov	r0,#__w5500_write_PARM_2
+      00053C E4               [12] 1455 	clr	a
+      00053D F2               [24] 1456 	movx	@r0,a
+      00053E 78r00            [12] 1457 	mov	r0,#__w5500_write_PARM_4
+      000540 74 04            [12] 1458 	mov	a,#0x04
+      000542 F2               [24] 1459 	movx	@r0,a
+      000543 08               [12] 1460 	inc	r0
+      000544 E4               [12] 1461 	clr	a
+      000545 F2               [24] 1462 	movx	@r0,a
+      000546 90 00 0F         [24] 1463 	mov	dptr,#0x000f
+      000549 12r00r00         [24] 1464 	lcall	__w5500_write
+                                   1465 ;	main.c:170: _w5500_set_mac(mac);
+      00054C 78r00            [12] 1466 	mov	r0,#__w5500_write_PARM_3
+      00054E 74r0C            [12] 1467 	mov	a,#_mac
+      000550 F2               [24] 1468 	movx	@r0,a
+      000551 08               [12] 1469 	inc	r0
+      000552 E4               [12] 1470 	clr	a
+      000553 F2               [24] 1471 	movx	@r0,a
+      000554 08               [12] 1472 	inc	r0
+      000555 74 60            [12] 1473 	mov	a,#0x60
+      000557 F2               [24] 1474 	movx	@r0,a
+      000558 78r00            [12] 1475 	mov	r0,#__w5500_write_PARM_2
+      00055A E4               [12] 1476 	clr	a
+      00055B F2               [24] 1477 	movx	@r0,a
+      00055C 78r00            [12] 1478 	mov	r0,#__w5500_write_PARM_4
+      00055E 74 06            [12] 1479 	mov	a,#0x06
+      000560 F2               [24] 1480 	movx	@r0,a
+      000561 08               [12] 1481 	inc	r0
+      000562 E4               [12] 1482 	clr	a
+      000563 F2               [24] 1483 	movx	@r0,a
+      000564 90 00 09         [24] 1484 	mov	dptr,#0x0009
+      000567 12r00r00         [24] 1485 	lcall	__w5500_write
+                                   1486 ;	main.c:171: _w5500_set_SIMR();
+      00056A 78r00            [12] 1487 	mov	r0,#__w5500_write_PARM_3
+      00056C 74r13            [12] 1488 	mov	a,#___str_12
+      00056E F2               [24] 1489 	movx	@r0,a
+      00056F 08               [12] 1490 	inc	r0
+      000570 74s01            [12] 1491 	mov	a,#(___str_12 >> 8)
+      000572 F2               [24] 1492 	movx	@r0,a
+      000573 08               [12] 1493 	inc	r0
+      000574 74 80            [12] 1494 	mov	a,#0x80
+      000576 F2               [24] 1495 	movx	@r0,a
+      000577 78r00            [12] 1496 	mov	r0,#__w5500_write_PARM_2
+      000579 E4               [12] 1497 	clr	a
+      00057A F2               [24] 1498 	movx	@r0,a
+      00057B 78r00            [12] 1499 	mov	r0,#__w5500_write_PARM_4
+      00057D 04               [12] 1500 	inc	a
+      00057E F2               [24] 1501 	movx	@r0,a
+      00057F 08               [12] 1502 	inc	r0
+      000580 E4               [12] 1503 	clr	a
+      000581 F2               [24] 1504 	movx	@r0,a
+      000582 90 00 18         [24] 1505 	mov	dptr,#0x0018
+      000585 12r00r00         [24] 1506 	lcall	__w5500_write
+                                   1507 ;	main.c:172: _serial_putstr("\n\rget_smir: ");
+      000588 90r01r15         [24] 1508 	mov	dptr,#___str_13
+      00058B 75 F0 80         [24] 1509 	mov	b,#0x80
+      00058E 12r00r00         [24] 1510 	lcall	__serial_putstr
+                                   1511 ;	main.c:173: _serial_putbyte_hex(_w5500_get_SIMR());
+      000591 12r00r00         [24] 1512 	lcall	__w5500_get_SIMR
+      000594 12r00r00         [24] 1513 	lcall	__serial_putbyte_hex
+                                   1514 ;	main.c:174: _serial_putstr("\n\rget_sir: ");
+      000597 90r01r22         [24] 1515 	mov	dptr,#___str_14
+      00059A 75 F0 80         [24] 1516 	mov	b,#0x80
+      00059D 12r00r00         [24] 1517 	lcall	__serial_putstr
+                                   1518 ;	main.c:175: _serial_putbyte_hex(_w5500_get_SIR());
+      0005A0 12r00r00         [24] 1519 	lcall	__w5500_get_SIR
+      0005A3 12r00r00         [24] 1520 	lcall	__serial_putbyte_hex
+                                   1521 ;	main.c:176: _serial_putstr("\n\rget_imr_socket0: ");
+      0005A6 90r01r2E         [24] 1522 	mov	dptr,#___str_15
+      0005A9 75 F0 80         [24] 1523 	mov	b,#0x80
+      0005AC 12r00r00         [24] 1524 	lcall	__serial_putstr
+                                   1525 ;	main.c:177: _serial_putbyte_hex(_w5500_get_IMR(SOCKET0));
+      0005AF 75 82 00         [24] 1526 	mov	dpl,#0x00
+      0005B2 12r00r00         [24] 1527 	lcall	__w5500_get_IMR
+      0005B5 12r00r00         [24] 1528 	lcall	__serial_putbyte_hex
+                                   1529 ;	main.c:178: _serial_putstr("\n\rget_imr_socket1:");
+      0005B8 90r01r42         [24] 1530 	mov	dptr,#___str_16
+      0005BB 75 F0 80         [24] 1531 	mov	b,#0x80
+      0005BE 12r00r00         [24] 1532 	lcall	__serial_putstr
+                                   1533 ;	main.c:179: _serial_putbyte_hex(_w5500_get_IMR(SOCKET1));
+      0005C1 75 82 01         [24] 1534 	mov	dpl,#0x01
+      0005C4 12r00r00         [24] 1535 	lcall	__w5500_get_IMR
+      0005C7 12r00r00         [24] 1536 	lcall	__serial_putbyte_hex
+                                   1537 ;	main.c:181: setuptcp();
+      0005CA 12r04rC5         [24] 1538 	lcall	_setuptcp
+                                   1539 ;	main.c:182: _w5500_set_destinationip(SOCKET0, dest_ip);
+      0005CD 78r00            [12] 1540 	mov	r0,#__w5500_set_destinationip_PARM_2
+      0005CF 74r12            [12] 1541 	mov	a,#_dest_ip
+      0005D1 F2               [24] 1542 	movx	@r0,a
+      0005D2 08               [12] 1543 	inc	r0
+      0005D3 E4               [12] 1544 	clr	a
+      0005D4 F2               [24] 1545 	movx	@r0,a
+      0005D5 08               [12] 1546 	inc	r0
+      0005D6 74 60            [12] 1547 	mov	a,#0x60
+      0005D8 F2               [24] 1548 	movx	@r0,a
+      0005D9 75 82 00         [24] 1549 	mov	dpl,#0x00
+      0005DC 12r00r00         [24] 1550 	lcall	__w5500_set_destinationip
+                                   1551 ;	main.c:183: _w5500_set_sourceport(SOCKET0, 5001);
+      0005DF 78r00            [12] 1552 	mov	r0,#__w5500_set_sourceport_PARM_2
+      0005E1 74 89            [12] 1553 	mov	a,#0x89
+      0005E3 F2               [24] 1554 	movx	@r0,a
+      0005E4 08               [12] 1555 	inc	r0
+      0005E5 23               [12] 1556 	rl	a
+      0005E6 F2               [24] 1557 	movx	@r0,a
+      0005E7 75 82 00         [24] 1558 	mov	dpl,#0x00
+      0005EA 12r00r00         [24] 1559 	lcall	__w5500_set_sourceport
+                                   1560 ;	main.c:184: _w5500_set_remoteport(SOCKET0, 37052);
+      0005ED 78r00            [12] 1561 	mov	r0,#__w5500_set_remoteport_PARM_2
+      0005EF 74 BC            [12] 1562 	mov	a,#0xbc
+      0005F1 F2               [24] 1563 	movx	@r0,a
+      0005F2 08               [12] 1564 	inc	r0
+      0005F3 74 90            [12] 1565 	mov	a,#0x90
+      0005F5 F2               [24] 1566 	movx	@r0,a
+      0005F6 75 82 00         [24] 1567 	mov	dpl,#0x00
+      0005F9 12r00r00         [24] 1568 	lcall	__w5500_set_remoteport
+                                   1569 ;	main.c:185: _w5500_set_udp(SOCKET0);
+      0005FC 75 82 00         [24] 1570 	mov	dpl,#0x00
+      0005FF 12r00r00         [24] 1571 	lcall	__w5500_set_udp
+                                   1572 ;	main.c:186: _w5500_open(SOCKET0);
+      000602 75 82 00         [24] 1573 	mov	dpl,#0x00
+      000605 12r00r00         [24] 1574 	lcall	__w5500_open
+                                   1575 ;	main.c:187: _w5500_set_IMR(SOCKET0);
+      000608 75 82 00         [24] 1576 	mov	dpl,#0x00
+      00060B 12r00r00         [24] 1577 	lcall	__w5500_set_IMR
+                                   1578 ;	main.c:189: P1_0 = 1;
+                                   1579 ;	assignBit
+      00060E D2 90            [12] 1580 	setb	_P1_0
+                                   1581 ;	main.c:190: P1_1 = 1;
+                                   1582 ;	assignBit
+      000610 D2 91            [12] 1583 	setb	_P1_1
+                                   1584 ;	main.c:191: }
+      000612 22               [24] 1585 	ret
+                                   1586 ;------------------------------------------------------------
+                                   1587 ;Allocation info for local variables in function 'loop'
+                                   1588 ;------------------------------------------------------------
+                                   1589 ;	main.c:193: void loop() {
+                                   1590 ;	-----------------------------------------
+                                   1591 ;	 function loop
+                                   1592 ;	-----------------------------------------
+      000613                       1593 _loop:
+                                   1594 ;	main.c:196: unsigned char recieved_udp = 0;
+      000613 78r28            [12] 1595 	mov	r0,#_loop_recieved_udp_65536_83
+      000615 E4               [12] 1596 	clr	a
+      000616 F2               [24] 1597 	movx	@r0,a
+                                   1598 ;	main.c:197: unsigned char recieved_tcp = 0;
+      000617 78r29            [12] 1599 	mov	r0,#_loop_recieved_tcp_65536_83
+      000619 F2               [24] 1600 	movx	@r0,a
+                                   1601 ;	main.c:199: unsigned char input_index = 0;
+      00061A 7D 00            [12] 1602 	mov	r5,#0x00
+                                   1603 ;	main.c:203: unsigned char serial_index = 0;
+      00061C 78r66            [12] 1604 	mov	r0,#_loop_serial_index_65536_83
+      00061E F2               [24] 1605 	movx	@r0,a
+                                   1606 ;	main.c:207: while(1){
+      00061F                       1607 00167$:
+                                   1608 ;	main.c:209: serialInput = _serial_emptybuffer();
+      00061F C0 05            [24] 1609 	push	ar5
+      000621 12r00r00         [24] 1610 	lcall	__serial_emptybuffer
+      000624 AA 82            [24] 1611 	mov	r2,dpl
+      000626 AB 83            [24] 1612 	mov	r3,dph
+      000628 AC F0            [24] 1613 	mov	r4,b
+      00062A 78r17            [12] 1614 	mov	r0,#_serialInput
+      00062C EA               [12] 1615 	mov	a,r2
+      00062D F2               [24] 1616 	movx	@r0,a
+      00062E 08               [12] 1617 	inc	r0
+      00062F EB               [12] 1618 	mov	a,r3
+      000630 F2               [24] 1619 	movx	@r0,a
+      000631 08               [12] 1620 	inc	r0
+      000632 EC               [12] 1621 	mov	a,r4
+      000633 F2               [24] 1622 	movx	@r0,a
+                                   1623 ;	main.c:210: unsigned char inputLength = strlen(serialInput);
+      000634 8A 82            [24] 1624 	mov	dpl,r2
+      000636 8B 83            [24] 1625 	mov	dph,r3
+      000638 8C F0            [24] 1626 	mov	b,r4
+      00063A 12r00r00         [24] 1627 	lcall	_strlen
+      00063D AC 82            [24] 1628 	mov	r4,dpl
+      00063F D0 05            [24] 1629 	pop	ar5
+      000641 78r67            [12] 1630 	mov	r0,#_loop_inputLength_131073_85
+      000643 EC               [12] 1631 	mov	a,r4
+      000644 F2               [24] 1632 	movx	@r0,a
+                                   1633 ;	main.c:211: if (inputLength) {
+      000645 EC               [12] 1634 	mov	a,r4
+      000646 70 03            [24] 1635 	jnz	00353$
+      000648 02r08r23         [24] 1636 	ljmp	00207$
+      00064B                       1637 00353$:
+                                   1638 ;	main.c:212: if(strcmp(serialInput, "?")){
+      00064B 78r1A            [12] 1639 	mov	r0,#_strcmp_PARM_2
+      00064D 74r55            [12] 1640 	mov	a,#___str_18
+      00064F F2               [24] 1641 	movx	@r0,a
+      000650 08               [12] 1642 	inc	r0
+      000651 74s01            [12] 1643 	mov	a,#(___str_18 >> 8)
+      000653 F2               [24] 1644 	movx	@r0,a
+      000654 08               [12] 1645 	inc	r0
+      000655 74 80            [12] 1646 	mov	a,#0x80
+      000657 F2               [24] 1647 	movx	@r0,a
+      000658 78r17            [12] 1648 	mov	r0,#_serialInput
+      00065A E2               [24] 1649 	movx	a,@r0
+      00065B F5 82            [12] 1650 	mov	dpl,a
+      00065D 08               [12] 1651 	inc	r0
+      00065E E2               [24] 1652 	movx	a,@r0
+      00065F F5 83            [12] 1653 	mov	dph,a
+      000661 08               [12] 1654 	inc	r0
+      000662 E2               [24] 1655 	movx	a,@r0
+      000663 F5 F0            [12] 1656 	mov	b,a
+      000665 C0 05            [24] 1657 	push	ar5
+      000667 12r00r20         [24] 1658 	lcall	_strcmp
+      00066A E5 82            [12] 1659 	mov	a,dpl
+      00066C D0 05            [24] 1660 	pop	ar5
+      00066E 60 0A            [24] 1661 	jz	00127$
+                                   1662 ;	main.c:213: menudisplay();
+      000670 C0 05            [24] 1663 	push	ar5
+      000672 12r04r36         [24] 1664 	lcall	_menudisplay
+      000675 D0 05            [24] 1665 	pop	ar5
+      000677 02r08r23         [24] 1666 	ljmp	00207$
+      00067A                       1667 00127$:
+                                   1668 ;	main.c:217: if(strcmp(serialInput, "\r")){
+      00067A 78r1A            [12] 1669 	mov	r0,#_strcmp_PARM_2
+      00067C 74r57            [12] 1670 	mov	a,#___str_19
+      00067E F2               [24] 1671 	movx	@r0,a
+      00067F 08               [12] 1672 	inc	r0
+      000680 74s01            [12] 1673 	mov	a,#(___str_19 >> 8)
+      000682 F2               [24] 1674 	movx	@r0,a
+      000683 08               [12] 1675 	inc	r0
+      000684 74 80            [12] 1676 	mov	a,#0x80
+      000686 F2               [24] 1677 	movx	@r0,a
+      000687 78r17            [12] 1678 	mov	r0,#_serialInput
+      000689 E2               [24] 1679 	movx	a,@r0
+      00068A F5 82            [12] 1680 	mov	dpl,a
+      00068C 08               [12] 1681 	inc	r0
+      00068D E2               [24] 1682 	movx	a,@r0
+      00068E F5 83            [12] 1683 	mov	dph,a
+      000690 08               [12] 1684 	inc	r0
+      000691 E2               [24] 1685 	movx	a,@r0
+      000692 F5 F0            [12] 1686 	mov	b,a
+      000694 C0 05            [24] 1687 	push	ar5
+      000696 12r00r20         [24] 1688 	lcall	_strcmp
+      000699 E5 82            [12] 1689 	mov	a,dpl
+      00069B D0 05            [24] 1690 	pop	ar5
+      00069D 70 03            [24] 1691 	jnz	00355$
+      00069F 02r07rD7         [24] 1692 	ljmp	00204$
+      0006A2                       1693 00355$:
+                                   1694 ;	main.c:218: if(serial_buffer[0]=='I' && serial_buffer[2]=='='){
+      0006A2 78r52            [12] 1695 	mov	r0,#_loop_serial_buffer_65536_83
+      0006A4 E2               [24] 1696 	movx	a,@r0
+      0006A5 FB               [12] 1697 	mov	r3,a
+      0006A6 BB 49 35         [24] 1698 	cjne	r3,#0x49,00118$
+      0006A9 78r54            [12] 1699 	mov	r0,#(_loop_serial_buffer_65536_83 + 0x0002)
+      0006AB E2               [24] 1700 	movx	a,@r0
+      0006AC FB               [12] 1701 	mov	r3,a
+      0006AD BB 3D 2E         [24] 1702 	cjne	r3,#0x3d,00118$
+                                   1703 ;	main.c:219: extractAndAssign(serial_buffer);
+      0006B0 90r00r52         [24] 1704 	mov	dptr,#_loop_serial_buffer_65536_83
+      0006B3 75 F0 60         [24] 1705 	mov	b,#0x60
+      0006B6 C0 05            [24] 1706 	push	ar5
+      0006B8 12r01r98         [24] 1707 	lcall	_extractAndAssign
+                                   1708 ;	main.c:220: _w5500_set_ip(ip);
+      0006BB 78r00            [12] 1709 	mov	r0,#__w5500_write_PARM_3
+      0006BD 74r08            [12] 1710 	mov	a,#_ip
+      0006BF F2               [24] 1711 	movx	@r0,a
+      0006C0 08               [12] 1712 	inc	r0
+      0006C1 E4               [12] 1713 	clr	a
+      0006C2 F2               [24] 1714 	movx	@r0,a
+      0006C3 08               [12] 1715 	inc	r0
+      0006C4 74 60            [12] 1716 	mov	a,#0x60
+      0006C6 F2               [24] 1717 	movx	@r0,a
+      0006C7 78r00            [12] 1718 	mov	r0,#__w5500_write_PARM_2
+      0006C9 E4               [12] 1719 	clr	a
+      0006CA F2               [24] 1720 	movx	@r0,a
+      0006CB 78r00            [12] 1721 	mov	r0,#__w5500_write_PARM_4
+      0006CD 74 04            [12] 1722 	mov	a,#0x04
+      0006CF F2               [24] 1723 	movx	@r0,a
+      0006D0 08               [12] 1724 	inc	r0
+      0006D1 E4               [12] 1725 	clr	a
+      0006D2 F2               [24] 1726 	movx	@r0,a
+      0006D3 90 00 0F         [24] 1727 	mov	dptr,#0x000f
+      0006D6 12r00r00         [24] 1728 	lcall	__w5500_write
+      0006D9 D0 05            [24] 1729 	pop	ar5
+      0006DB 02r07rB4         [24] 1730 	ljmp	00202$
+      0006DE                       1731 00118$:
+                                   1732 ;	main.c:221: } else if(serial_buffer[0]=='R' && serial_buffer[3]=='='){
+      0006DE 78r52            [12] 1733 	mov	r0,#_loop_serial_buffer_65536_83
+      0006E0 E2               [24] 1734 	movx	a,@r0
+      0006E1 FB               [12] 1735 	mov	r3,a
+      0006E2 BB 52 10         [24] 1736 	cjne	r3,#0x52,00114$
+      0006E5 78r55            [12] 1737 	mov	r0,#(_loop_serial_buffer_65536_83 + 0x0003)
+      0006E7 E2               [24] 1738 	movx	a,@r0
+      0006E8 FB               [12] 1739 	mov	r3,a
+      0006E9 BB 3D 09         [24] 1740 	cjne	r3,#0x3d,00114$
+                                   1741 ;	main.c:222: RTU_Address = serial_buffer[4];
+      0006EC 78r56            [12] 1742 	mov	r0,#(_loop_serial_buffer_65536_83 + 0x0004)
+      0006EE 79r16            [12] 1743 	mov	r1,#_RTU_Address
+      0006F0 E2               [24] 1744 	movx	a,@r0
+      0006F1 F3               [24] 1745 	movx	@r1,a
+      0006F2 02r07rB4         [24] 1746 	ljmp	00202$
+      0006F5                       1747 00114$:
+                                   1748 ;	main.c:223: } else if(serial_buffer[0]=='G' && serial_buffer[4]=='='){
+      0006F5 78r52            [12] 1749 	mov	r0,#_loop_serial_buffer_65536_83
+      0006F7 E2               [24] 1750 	movx	a,@r0
+      0006F8 FB               [12] 1751 	mov	r3,a
+      0006F9 BB 47 35         [24] 1752 	cjne	r3,#0x47,00110$
+      0006FC 78r56            [12] 1753 	mov	r0,#(_loop_serial_buffer_65536_83 + 0x0004)
+      0006FE E2               [24] 1754 	movx	a,@r0
+      0006FF FB               [12] 1755 	mov	r3,a
+      000700 BB 3D 2E         [24] 1756 	cjne	r3,#0x3d,00110$
+                                   1757 ;	main.c:224: extractAndAssign(serial_buffer);
+      000703 90r00r52         [24] 1758 	mov	dptr,#_loop_serial_buffer_65536_83
+      000706 75 F0 60         [24] 1759 	mov	b,#0x60
+      000709 C0 05            [24] 1760 	push	ar5
+      00070B 12r01r98         [24] 1761 	lcall	_extractAndAssign
+                                   1762 ;	main.c:225: _w5500_set_gateway(gateway);
+      00070E 78r00            [12] 1763 	mov	r0,#__w5500_write_PARM_3
+      000710 74r00            [12] 1764 	mov	a,#_gateway
+      000712 F2               [24] 1765 	movx	@r0,a
+      000713 08               [12] 1766 	inc	r0
+      000714 E4               [12] 1767 	clr	a
+      000715 F2               [24] 1768 	movx	@r0,a
+      000716 08               [12] 1769 	inc	r0
+      000717 74 60            [12] 1770 	mov	a,#0x60
+      000719 F2               [24] 1771 	movx	@r0,a
+      00071A 78r00            [12] 1772 	mov	r0,#__w5500_write_PARM_2
+      00071C E4               [12] 1773 	clr	a
+      00071D F2               [24] 1774 	movx	@r0,a
+      00071E 78r00            [12] 1775 	mov	r0,#__w5500_write_PARM_4
+      000720 74 04            [12] 1776 	mov	a,#0x04
+      000722 F2               [24] 1777 	movx	@r0,a
+      000723 08               [12] 1778 	inc	r0
+      000724 E4               [12] 1779 	clr	a
+      000725 F2               [24] 1780 	movx	@r0,a
+      000726 90 00 01         [24] 1781 	mov	dptr,#0x0001
+      000729 12r00r00         [24] 1782 	lcall	__w5500_write
+      00072C D0 05            [24] 1783 	pop	ar5
+      00072E 02r07rB4         [24] 1784 	ljmp	00202$
+      000731                       1785 00110$:
+                                   1786 ;	main.c:226: } else if(serial_buffer[0]=='S' && serial_buffer[3]=='='){
+      000731 78r52            [12] 1787 	mov	r0,#_loop_serial_buffer_65536_83
+      000733 E2               [24] 1788 	movx	a,@r0
+      000734 FB               [12] 1789 	mov	r3,a
+      000735 BB 53 34         [24] 1790 	cjne	r3,#0x53,00106$
+      000738 78r55            [12] 1791 	mov	r0,#(_loop_serial_buffer_65536_83 + 0x0003)
+      00073A E2               [24] 1792 	movx	a,@r0
+      00073B FB               [12] 1793 	mov	r3,a
+      00073C BB 3D 2D         [24] 1794 	cjne	r3,#0x3d,00106$
+                                   1795 ;	main.c:227: extractAndAssign(serial_buffer);
+      00073F 90r00r52         [24] 1796 	mov	dptr,#_loop_serial_buffer_65536_83
+      000742 75 F0 60         [24] 1797 	mov	b,#0x60
+      000745 C0 05            [24] 1798 	push	ar5
+      000747 12r01r98         [24] 1799 	lcall	_extractAndAssign
+                                   1800 ;	main.c:228: _w5500_set_subnet(subnet);
+      00074A 78r00            [12] 1801 	mov	r0,#__w5500_write_PARM_3
+      00074C 74r04            [12] 1802 	mov	a,#_subnet
+      00074E F2               [24] 1803 	movx	@r0,a
+      00074F 08               [12] 1804 	inc	r0
+      000750 E4               [12] 1805 	clr	a
+      000751 F2               [24] 1806 	movx	@r0,a
+      000752 08               [12] 1807 	inc	r0
+      000753 74 60            [12] 1808 	mov	a,#0x60
+      000755 F2               [24] 1809 	movx	@r0,a
+      000756 78r00            [12] 1810 	mov	r0,#__w5500_write_PARM_2
+      000758 E4               [12] 1811 	clr	a
+      000759 F2               [24] 1812 	movx	@r0,a
+      00075A 78r00            [12] 1813 	mov	r0,#__w5500_write_PARM_4
+      00075C 74 04            [12] 1814 	mov	a,#0x04
+      00075E F2               [24] 1815 	movx	@r0,a
+      00075F 08               [12] 1816 	inc	r0
+      000760 E4               [12] 1817 	clr	a
+      000761 F2               [24] 1818 	movx	@r0,a
+      000762 90 00 05         [24] 1819 	mov	dptr,#0x0005
+      000765 12r00r00         [24] 1820 	lcall	__w5500_write
+      000768 D0 05            [24] 1821 	pop	ar5
+      00076A 80 48            [24] 1822 	sjmp	00202$
+      00076C                       1823 00106$:
+                                   1824 ;	main.c:229: } else if(serial_buffer[0]=='M' && serial_buffer[3]=='='){
+      00076C 78r52            [12] 1825 	mov	r0,#_loop_serial_buffer_65536_83
+      00076E E2               [24] 1826 	movx	a,@r0
+      00076F FB               [12] 1827 	mov	r3,a
+      000770 BB 4D 34         [24] 1828 	cjne	r3,#0x4d,00102$
+      000773 78r55            [12] 1829 	mov	r0,#(_loop_serial_buffer_65536_83 + 0x0003)
+      000775 E2               [24] 1830 	movx	a,@r0
+      000776 FB               [12] 1831 	mov	r3,a
+      000777 BB 3D 2D         [24] 1832 	cjne	r3,#0x3d,00102$
+                                   1833 ;	main.c:230: parseMAC(serial_buffer);
+      00077A 90r00r52         [24] 1834 	mov	dptr,#_loop_serial_buffer_65536_83
+      00077D 75 F0 60         [24] 1835 	mov	b,#0x60
+      000780 C0 05            [24] 1836 	push	ar5
+      000782 12r00r94         [24] 1837 	lcall	_parseMAC
+                                   1838 ;	main.c:231: _w5500_set_mac(mac);
+      000785 78r00            [12] 1839 	mov	r0,#__w5500_write_PARM_3
+      000787 74r0C            [12] 1840 	mov	a,#_mac
+      000789 F2               [24] 1841 	movx	@r0,a
+      00078A 08               [12] 1842 	inc	r0
+      00078B E4               [12] 1843 	clr	a
+      00078C F2               [24] 1844 	movx	@r0,a
+      00078D 08               [12] 1845 	inc	r0
+      00078E 74 60            [12] 1846 	mov	a,#0x60
+      000790 F2               [24] 1847 	movx	@r0,a
+      000791 78r00            [12] 1848 	mov	r0,#__w5500_write_PARM_2
+      000793 E4               [12] 1849 	clr	a
+      000794 F2               [24] 1850 	movx	@r0,a
+      000795 78r00            [12] 1851 	mov	r0,#__w5500_write_PARM_4
+      000797 74 06            [12] 1852 	mov	a,#0x06
+      000799 F2               [24] 1853 	movx	@r0,a
+      00079A 08               [12] 1854 	inc	r0
+      00079B E4               [12] 1855 	clr	a
+      00079C F2               [24] 1856 	movx	@r0,a
+      00079D 90 00 09         [24] 1857 	mov	dptr,#0x0009
+      0007A0 12r00r00         [24] 1858 	lcall	__w5500_write
+      0007A3 D0 05            [24] 1859 	pop	ar5
+      0007A5 80 0D            [24] 1860 	sjmp	00202$
+      0007A7                       1861 00102$:
+                                   1862 ;	main.c:233: _serial_putstr("\n\rInvalid Command");
+      0007A7 90r01r59         [24] 1863 	mov	dptr,#___str_20
+      0007AA 75 F0 80         [24] 1864 	mov	b,#0x80
+      0007AD C0 05            [24] 1865 	push	ar5
+      0007AF 12r00r00         [24] 1866 	lcall	__serial_putstr
+      0007B2 D0 05            [24] 1867 	pop	ar5
+                                   1868 ;	main.c:236: for(unsigned char i = 0; i< 20; i++){
+      0007B4                       1869 00202$:
+      0007B4 7B 00            [12] 1870 	mov	r3,#0x00
+      0007B6                       1871 00172$:
+      0007B6 BB 14 00         [24] 1872 	cjne	r3,#0x14,00376$
+      0007B9                       1873 00376$:
+      0007B9 50 09            [24] 1874 	jnc	00121$
+                                   1875 ;	main.c:237: serial_buffer[i] = '\0';
+      0007BB EB               [12] 1876 	mov	a,r3
+      0007BC 24r52            [12] 1877 	add	a,#_loop_serial_buffer_65536_83
+      0007BE F8               [12] 1878 	mov	r0,a
+      0007BF E4               [12] 1879 	clr	a
+      0007C0 F2               [24] 1880 	movx	@r0,a
+                                   1881 ;	main.c:236: for(unsigned char i = 0; i< 20; i++){
+      0007C1 0B               [12] 1882 	inc	r3
+      0007C2 80 F2            [24] 1883 	sjmp	00172$
+      0007C4                       1884 00121$:
+                                   1885 ;	main.c:239: _serial_putstr("\n");
+      0007C4 90r01r6B         [24] 1886 	mov	dptr,#___str_21
+      0007C7 75 F0 80         [24] 1887 	mov	b,#0x80
+      0007CA C0 05            [24] 1888 	push	ar5
+      0007CC 12r00r00         [24] 1889 	lcall	__serial_putstr
+      0007CF D0 05            [24] 1890 	pop	ar5
+                                   1891 ;	main.c:240: serial_index=0;
+      0007D1 78r66            [12] 1892 	mov	r0,#_loop_serial_index_65536_83
+      0007D3 E4               [12] 1893 	clr	a
+      0007D4 F2               [24] 1894 	movx	@r0,a
+                                   1895 ;	main.c:242: for (unsigned char charIndex = 0; charIndex < inputLength; charIndex++)
+      0007D5 80 38            [24] 1896 	sjmp	00125$
+      0007D7                       1897 00204$:
+      0007D7 78r66            [12] 1898 	mov	r0,#_loop_serial_index_65536_83
+      0007D9 E2               [24] 1899 	movx	a,@r0
+      0007DA FB               [12] 1900 	mov	r3,a
+      0007DB 7A 00            [12] 1901 	mov	r2,#0x00
+      0007DD                       1902 00175$:
+      0007DD 78r67            [12] 1903 	mov	r0,#_loop_inputLength_131073_85
+      0007DF C3               [12] 1904 	clr	c
+      0007E0 E2               [24] 1905 	movx	a,@r0
+      0007E1 F5 F0            [12] 1906 	mov	b,a
+      0007E3 EA               [12] 1907 	mov	a,r2
+      0007E4 95 F0            [12] 1908 	subb	a,b
+      0007E6 50 23            [24] 1909 	jnc	00229$
+                                   1910 ;	main.c:244: serial_buffer[serial_index] = serialInput[charIndex];
+      0007E8 C0 05            [24] 1911 	push	ar5
+      0007EA EB               [12] 1912 	mov	a,r3
+      0007EB 24r52            [12] 1913 	add	a,#_loop_serial_buffer_65536_83
+      0007ED F9               [12] 1914 	mov	r1,a
+      0007EE 78r17            [12] 1915 	mov	r0,#_serialInput
+      0007F0 E2               [24] 1916 	movx	a,@r0
+      0007F1 2A               [12] 1917 	add	a,r2
+      0007F2 FD               [12] 1918 	mov	r5,a
+      0007F3 08               [12] 1919 	inc	r0
+      0007F4 E2               [24] 1920 	movx	a,@r0
+      0007F5 34 00            [12] 1921 	addc	a,#0x00
+      0007F7 FE               [12] 1922 	mov	r6,a
+      0007F8 08               [12] 1923 	inc	r0
+      0007F9 E2               [24] 1924 	movx	a,@r0
+      0007FA FF               [12] 1925 	mov	r7,a
+      0007FB 8D 82            [24] 1926 	mov	dpl,r5
+      0007FD 8E 83            [24] 1927 	mov	dph,r6
+      0007FF 8F F0            [24] 1928 	mov	b,r7
+      000801 12r00r00         [24] 1929 	lcall	__gptrget
+      000804 F3               [24] 1930 	movx	@r1,a
+                                   1931 ;	main.c:245: serial_index++;
+      000805 0B               [12] 1932 	inc	r3
+                                   1933 ;	main.c:242: for (unsigned char charIndex = 0; charIndex < inputLength; charIndex++)
+      000806 0A               [12] 1934 	inc	r2
+      000807 D0 05            [24] 1935 	pop	ar5
+      000809 80 D2            [24] 1936 	sjmp	00175$
+      00080B                       1937 00229$:
+      00080B 78r66            [12] 1938 	mov	r0,#_loop_serial_index_65536_83
+      00080D EB               [12] 1939 	mov	a,r3
+      00080E F2               [24] 1940 	movx	@r0,a
+      00080F                       1941 00125$:
+                                   1942 ;	main.c:248: _serial_putstr(serialInput);
+      00080F 78r17            [12] 1943 	mov	r0,#_serialInput
+      000811 E2               [24] 1944 	movx	a,@r0
+      000812 F5 82            [12] 1945 	mov	dpl,a
+      000814 08               [12] 1946 	inc	r0
+      000815 E2               [24] 1947 	movx	a,@r0
+      000816 F5 83            [12] 1948 	mov	dph,a
+      000818 08               [12] 1949 	inc	r0
+      000819 E2               [24] 1950 	movx	a,@r0
+      00081A F5 F0            [12] 1951 	mov	b,a
+      00081C C0 05            [24] 1952 	push	ar5
+      00081E 12r00r00         [24] 1953 	lcall	__serial_putstr
+      000821 D0 05            [24] 1954 	pop	ar5
+                                   1955 ;	main.c:256: while (_w5500_bytesinbuffer(SOCKET0)) {
+      000823                       1956 00207$:
+      000823 7F 00            [12] 1957 	mov	r7,#0x00
+      000825 8D 06            [24] 1958 	mov	ar6,r5
+      000827                       1959 00135$:
+      000827 75 82 00         [24] 1960 	mov	dpl,#0x00
+      00082A C0 07            [24] 1961 	push	ar7
+      00082C C0 06            [24] 1962 	push	ar6
+      00082E 12r00r00         [24] 1963 	lcall	__w5500_bytesinbuffer
+      000831 E5 82            [12] 1964 	mov	a,dpl
+      000833 85 83 F0         [24] 1965 	mov	b,dph
+      000836 D0 06            [24] 1966 	pop	ar6
+      000838 D0 07            [24] 1967 	pop	ar7
+      00083A 45 F0            [12] 1968 	orl	a,b
+      00083C 60 5D            [24] 1969 	jz	00230$
+                                   1970 ;	main.c:257: P1_0 = 0;
+                                   1971 ;	assignBit
+      00083E C2 90            [12] 1972 	clr	_P1_0
+                                   1973 ;	main.c:258: P1_1 = 1;
+                                   1974 ;	assignBit
+      000840 D2 91            [12] 1975 	setb	_P1_1
+                                   1976 ;	main.c:259: ++read;
+      000842 0F               [12] 1977 	inc	r7
+                                   1978 ;	main.c:260: if (read < 9) {
+      000843 BF 09 00         [24] 1979 	cjne	r7,#0x09,00380$
+      000846                       1980 00380$:
+      000846 50 10            [24] 1981 	jnc	00132$
+                                   1982 ;	main.c:261: _w5500_readchar(SOCKET0);
+      000848 75 82 00         [24] 1983 	mov	dpl,#0x00
+      00084B C0 07            [24] 1984 	push	ar7
+      00084D C0 06            [24] 1985 	push	ar6
+      00084F 12r00r00         [24] 1986 	lcall	__w5500_readchar
+      000852 D0 06            [24] 1987 	pop	ar6
+      000854 D0 07            [24] 1988 	pop	ar7
+                                   1989 ;	main.c:262: continue;
+      000856 80 CF            [24] 1990 	sjmp	00135$
+      000858                       1991 00132$:
+                                   1992 ;	main.c:264: rec_char_byte = _w5500_readchar(SOCKET0);
+      000858 75 82 00         [24] 1993 	mov	dpl,#0x00
+      00085B C0 07            [24] 1994 	push	ar7
+      00085D C0 06            [24] 1995 	push	ar6
+      00085F 12r00r00         [24] 1996 	lcall	__w5500_readchar
+      000862 AB 82            [24] 1997 	mov	r3,dpl
+      000864 D0 06            [24] 1998 	pop	ar6
+      000866 D0 07            [24] 1999 	pop	ar7
+                                   2000 ;	main.c:265: if (islower(rec_char_byte)) {
+      000868 8B 02            [24] 2001 	mov	ar2,r3
+                                   2002 ;	/usr/bin/../share/sdcc/include/ctype.h:71: return ((unsigned char)c >= 'a' && (unsigned char)c <= 'z');
+      00086A BA 61 00         [24] 2003 	cjne	r2,#0x61,00382$
+      00086D                       2004 00382$:
+      00086D 40 1E            [24] 2005 	jc	00134$
+      00086F EA               [12] 2006 	mov	a,r2
+      000870 24 85            [12] 2007 	add	a,#0xff - 0x7a
+      000872 40 19            [24] 2008 	jc	00134$
+                                   2009 ;	main.c:266: rec_char_byte = toupper(rec_char_byte);
+      000874 8B 02            [24] 2010 	mov	ar2,r3
+      000876 7C 00            [12] 2011 	mov	r4,#0x00
+      000878 8A 82            [24] 2012 	mov	dpl,r2
+      00087A 8C 83            [24] 2013 	mov	dph,r4
+      00087C C0 07            [24] 2014 	push	ar7
+      00087E C0 06            [24] 2015 	push	ar6
+      000880 12r00r00         [24] 2016 	lcall	_toupper
+      000883 AA 82            [24] 2017 	mov	r2,dpl
+      000885 AC 83            [24] 2018 	mov	r4,dph
+      000887 D0 06            [24] 2019 	pop	ar6
+      000889 D0 07            [24] 2020 	pop	ar7
+      00088B 8A 03            [24] 2021 	mov	ar3,r2
+      00088D                       2022 00134$:
+                                   2023 ;	main.c:268: input_buffer[input_index] = rec_char_byte;
+      00088D EE               [12] 2024 	mov	a,r6
+      00088E 24r2A            [12] 2025 	add	a,#_loop_input_buffer_65536_83
+      000890 F8               [12] 2026 	mov	r0,a
+      000891 EB               [12] 2027 	mov	a,r3
+      000892 F2               [24] 2028 	movx	@r0,a
+                                   2029 ;	main.c:269: input_index++;
+      000893 0E               [12] 2030 	inc	r6
+                                   2031 ;	main.c:270: recieved_udp = 1;
+      000894 78r28            [12] 2032 	mov	r0,#_loop_recieved_udp_65536_83
+      000896 74 01            [12] 2033 	mov	a,#0x01
+      000898 F2               [24] 2034 	movx	@r0,a
+      000899 80 8C            [24] 2035 	sjmp	00135$
+      00089B                       2036 00230$:
+      00089B 8E 05            [24] 2037 	mov	ar5,r6
+                                   2038 ;	main.c:272: if(recieved_udp){
+      00089D 78r28            [12] 2039 	mov	r0,#_loop_recieved_udp_65536_83
+      00089F E2               [24] 2040 	movx	a,@r0
+      0008A0 70 03            [24] 2041 	jnz	00385$
+      0008A2 02r09r88         [24] 2042 	ljmp	00147$
+      0008A5                       2043 00385$:
+                                   2044 ;	main.c:273: P1_0 = 1;
+                                   2045 ;	assignBit
+      0008A5 D2 90            [12] 2046 	setb	_P1_0
+                                   2047 ;	main.c:274: P1_1 = 0;
+                                   2048 ;	assignBit
+      0008A7 C2 91            [12] 2049 	clr	_P1_1
+                                   2050 ;	main.c:275: if(input_buffer[0] == ':' && input_buffer[1] == '<' && input_buffer[input_index-1] == '>'){
+      0008A9 78r2A            [12] 2051 	mov	r0,#_loop_input_buffer_65536_83
+      0008AB E2               [24] 2052 	movx	a,@r0
+      0008AC FF               [12] 2053 	mov	r7,a
+      0008AD BF 3A 4D         [24] 2054 	cjne	r7,#0x3a,00141$
+      0008B0 78r2B            [12] 2055 	mov	r0,#(_loop_input_buffer_65536_83 + 0x0001)
+      0008B2 E2               [24] 2056 	movx	a,@r0
+      0008B3 FF               [12] 2057 	mov	r7,a
+      0008B4 BF 3C 46         [24] 2058 	cjne	r7,#0x3c,00141$
+      0008B7 8E 07            [24] 2059 	mov	ar7,r6
+      0008B9 EF               [12] 2060 	mov	a,r7
+      0008BA 14               [12] 2061 	dec	a
+      0008BB 24r2A            [12] 2062 	add	a,#_loop_input_buffer_65536_83
+      0008BD F9               [12] 2063 	mov	r1,a
+      0008BE E3               [24] 2064 	movx	a,@r1
+      0008BF FC               [12] 2065 	mov	r4,a
+      0008C0 BC 3E 3A         [24] 2066 	cjne	r4,#0x3e,00141$
+                                   2067 ;	main.c:276: input_buffer[1] = '[';
+      0008C3 78r2B            [12] 2068 	mov	r0,#(_loop_input_buffer_65536_83 + 0x0001)
+      0008C5 74 5B            [12] 2069 	mov	a,#0x5b
+      0008C7 F2               [24] 2070 	movx	@r0,a
+                                   2071 ;	main.c:277: input_buffer[input_index-1] = ']';
+      0008C8 EF               [12] 2072 	mov	a,r7
+      0008C9 14               [12] 2073 	dec	a
+      0008CA 24r2A            [12] 2074 	add	a,#_loop_input_buffer_65536_83
+      0008CC F8               [12] 2075 	mov	r0,a
+      0008CD 74 5D            [12] 2076 	mov	a,#0x5d
+      0008CF F2               [24] 2077 	movx	@r0,a
+                                   2078 ;	main.c:278: if(input_buffer[2] == RTU_Address){
+      0008D0 78r2C            [12] 2079 	mov	r0,#(_loop_input_buffer_65536_83 + 0x0002)
+      0008D2 E2               [24] 2080 	movx	a,@r0
+      0008D3 FF               [12] 2081 	mov	r7,a
+      0008D4 78r16            [12] 2082 	mov	r0,#_RTU_Address
+      0008D6 E2               [24] 2083 	movx	a,@r0
+      0008D7 B5 07 02         [24] 2084 	cjne	a,ar7,00392$
+      0008DA 80 03            [24] 2085 	sjmp	00393$
+      0008DC                       2086 00392$:
+      0008DC 02r09r60         [24] 2087 	ljmp	00216$
+      0008DF                       2088 00393$:
+                                   2089 ;	main.c:279: _w5500_writeto(SOCKET0, input_buffer, input_index);
+      0008DF 78r00            [12] 2090 	mov	r0,#__w5500_writeto_PARM_2
+      0008E1 74r2A            [12] 2091 	mov	a,#_loop_input_buffer_65536_83
+      0008E3 F2               [24] 2092 	movx	@r0,a
+      0008E4 08               [12] 2093 	inc	r0
+      0008E5 E4               [12] 2094 	clr	a
+      0008E6 F2               [24] 2095 	movx	@r0,a
+      0008E7 08               [12] 2096 	inc	r0
+      0008E8 74 60            [12] 2097 	mov	a,#0x60
+      0008EA F2               [24] 2098 	movx	@r0,a
+      0008EB 78r00            [12] 2099 	mov	r0,#__w5500_writeto_PARM_3
+      0008ED EE               [12] 2100 	mov	a,r6
+      0008EE F2               [24] 2101 	movx	@r0,a
+      0008EF 75 82 00         [24] 2102 	mov	dpl,#0x00
+      0008F2 12r00r00         [24] 2103 	lcall	__w5500_writeto
+                                   2104 ;	main.c:280: _w5500_send(SOCKET0);
+      0008F5 75 82 00         [24] 2105 	mov	dpl,#0x00
+      0008F8 12r00r00         [24] 2106 	lcall	__w5500_send
+      0008FB 80 63            [24] 2107 	sjmp	00216$
+      0008FD                       2108 00141$:
+                                   2109 ;	main.c:283: unsigned char fail[14] = "Invalid Format";
+      0008FD 78r68            [12] 2110 	mov	r0,#_loop_fail_262145_107
+      0008FF 74 49            [12] 2111 	mov	a,#0x49
+      000901 F2               [24] 2112 	movx	@r0,a
+      000902 78r69            [12] 2113 	mov	r0,#(_loop_fail_262145_107 + 0x0001)
+      000904 74 6E            [12] 2114 	mov	a,#0x6e
+      000906 F2               [24] 2115 	movx	@r0,a
+      000907 78r6A            [12] 2116 	mov	r0,#(_loop_fail_262145_107 + 0x0002)
+      000909 74 76            [12] 2117 	mov	a,#0x76
+      00090B F2               [24] 2118 	movx	@r0,a
+      00090C 78r6B            [12] 2119 	mov	r0,#(_loop_fail_262145_107 + 0x0003)
+      00090E 74 61            [12] 2120 	mov	a,#0x61
+      000910 F2               [24] 2121 	movx	@r0,a
+      000911 78r6C            [12] 2122 	mov	r0,#(_loop_fail_262145_107 + 0x0004)
+      000913 74 6C            [12] 2123 	mov	a,#0x6c
+      000915 F2               [24] 2124 	movx	@r0,a
+      000916 78r6D            [12] 2125 	mov	r0,#(_loop_fail_262145_107 + 0x0005)
+      000918 74 69            [12] 2126 	mov	a,#0x69
+      00091A F2               [24] 2127 	movx	@r0,a
+      00091B 78r6E            [12] 2128 	mov	r0,#(_loop_fail_262145_107 + 0x0006)
+      00091D 74 64            [12] 2129 	mov	a,#0x64
+      00091F F2               [24] 2130 	movx	@r0,a
+      000920 78r6F            [12] 2131 	mov	r0,#(_loop_fail_262145_107 + 0x0007)
+      000922 74 20            [12] 2132 	mov	a,#0x20
+      000924 F2               [24] 2133 	movx	@r0,a
+      000925 78r70            [12] 2134 	mov	r0,#(_loop_fail_262145_107 + 0x0008)
+      000927 74 46            [12] 2135 	mov	a,#0x46
+      000929 F2               [24] 2136 	movx	@r0,a
+      00092A 78r71            [12] 2137 	mov	r0,#(_loop_fail_262145_107 + 0x0009)
+      00092C 74 6F            [12] 2138 	mov	a,#0x6f
+      00092E F2               [24] 2139 	movx	@r0,a
+      00092F 78r72            [12] 2140 	mov	r0,#(_loop_fail_262145_107 + 0x000a)
+      000931 74 72            [12] 2141 	mov	a,#0x72
+      000933 F2               [24] 2142 	movx	@r0,a
+      000934 78r73            [12] 2143 	mov	r0,#(_loop_fail_262145_107 + 0x000b)
+      000936 74 6D            [12] 2144 	mov	a,#0x6d
+      000938 F2               [24] 2145 	movx	@r0,a
+      000939 78r74            [12] 2146 	mov	r0,#(_loop_fail_262145_107 + 0x000c)
+      00093B 74 61            [12] 2147 	mov	a,#0x61
+      00093D F2               [24] 2148 	movx	@r0,a
+      00093E 78r75            [12] 2149 	mov	r0,#(_loop_fail_262145_107 + 0x000d)
+      000940 74 74            [12] 2150 	mov	a,#0x74
+      000942 F2               [24] 2151 	movx	@r0,a
+                                   2152 ;	main.c:284: _w5500_writeto(SOCKET0, fail, 13);
+      000943 78r00            [12] 2153 	mov	r0,#__w5500_writeto_PARM_2
+      000945 74r68            [12] 2154 	mov	a,#_loop_fail_262145_107
+      000947 F2               [24] 2155 	movx	@r0,a
+      000948 08               [12] 2156 	inc	r0
+      000949 E4               [12] 2157 	clr	a
+      00094A F2               [24] 2158 	movx	@r0,a
+      00094B 08               [12] 2159 	inc	r0
+      00094C 74 60            [12] 2160 	mov	a,#0x60
+      00094E F2               [24] 2161 	movx	@r0,a
+      00094F 78r00            [12] 2162 	mov	r0,#__w5500_writeto_PARM_3
+      000951 74 0D            [12] 2163 	mov	a,#0x0d
+      000953 F2               [24] 2164 	movx	@r0,a
+      000954 75 82 00         [24] 2165 	mov	dpl,#0x00
+      000957 12r00r00         [24] 2166 	lcall	__w5500_writeto
+                                   2167 ;	main.c:285: _w5500_send(SOCKET0);
+      00095A 75 82 00         [24] 2168 	mov	dpl,#0x00
+      00095D 12r00r00         [24] 2169 	lcall	__w5500_send
+                                   2170 ;	main.c:287: for(unsigned char j = 0; j < 20; j++){
+      000960                       2171 00216$:
+      000960 7F 00            [12] 2172 	mov	r7,#0x00
+      000962                       2173 00178$:
+      000962 BF 14 00         [24] 2174 	cjne	r7,#0x14,00394$
+      000965                       2175 00394$:
+      000965 50 0B            [24] 2176 	jnc	00145$
+                                   2177 ;	main.c:288: P2_4 = !P2_4;
+      000967 B2 A4            [12] 2178 	cpl	_P2_4
+                                   2179 ;	main.c:289: input_buffer[j] = '\0';
+      000969 EF               [12] 2180 	mov	a,r7
+      00096A 24r2A            [12] 2181 	add	a,#_loop_input_buffer_65536_83
+      00096C F8               [12] 2182 	mov	r0,a
+      00096D E4               [12] 2183 	clr	a
+      00096E F2               [24] 2184 	movx	@r0,a
+                                   2185 ;	main.c:287: for(unsigned char j = 0; j < 20; j++){
+      00096F 0F               [12] 2186 	inc	r7
+      000970 80 F0            [24] 2187 	sjmp	00178$
+      000972                       2188 00145$:
+                                   2189 ;	main.c:291: input_index = 0;
+      000972 7D 00            [12] 2190 	mov	r5,#0x00
+                                   2191 ;	main.c:292: recieved_udp = 0;
+      000974 78r28            [12] 2192 	mov	r0,#_loop_recieved_udp_65536_83
+      000976 E4               [12] 2193 	clr	a
+      000977 F2               [24] 2194 	movx	@r0,a
+                                   2195 ;	main.c:293: _w5500_clear_SNIR(SOCKET1);
+      000978 75 82 01         [24] 2196 	mov	dpl,#0x01
+      00097B C0 05            [24] 2197 	push	ar5
+      00097D 12r00r00         [24] 2198 	lcall	__w5500_clear_SNIR
+                                   2199 ;	main.c:294: _w5500_clear_SNIR(SOCKET0);
+      000980 75 82 00         [24] 2200 	mov	dpl,#0x00
+      000983 12r00r00         [24] 2201 	lcall	__w5500_clear_SNIR
+      000986 D0 05            [24] 2202 	pop	ar5
+      000988                       2203 00147$:
+                                   2204 ;	main.c:300: unsigned char status = _w5500_get_status(SOCKET1);
+      000988 75 82 01         [24] 2205 	mov	dpl,#0x01
+      00098B C0 05            [24] 2206 	push	ar5
+      00098D 12r00r00         [24] 2207 	lcall	__w5500_get_status
+      000990 AF 82            [24] 2208 	mov	r7,dpl
+      000992 D0 05            [24] 2209 	pop	ar5
+                                   2210 ;	main.c:301: count=0;
+      000994 7E 00            [12] 2211 	mov	r6,#0x00
+                                   2212 ;	main.c:303: if (status == SOCK_ESTABLISHED) {
+      000996 BF 17 02         [24] 2213 	cjne	r7,#0x17,00396$
+      000999 80 03            [24] 2214 	sjmp	00397$
+      00099B                       2215 00396$:
+      00099B 02r0Ar9E         [24] 2216 	ljmp	00163$
+      00099E                       2217 00397$:
+                                   2218 ;	main.c:304: while (_w5500_bytesinbuffer(SOCKET1)) {
+      00099E                       2219 00150$:
+      00099E 75 82 01         [24] 2220 	mov	dpl,#0x01
+      0009A1 C0 07            [24] 2221 	push	ar7
+      0009A3 C0 06            [24] 2222 	push	ar6
+      0009A5 C0 05            [24] 2223 	push	ar5
+      0009A7 12r00r00         [24] 2224 	lcall	__w5500_bytesinbuffer
+      0009AA E5 82            [12] 2225 	mov	a,dpl
+      0009AC 85 83 F0         [24] 2226 	mov	b,dph
+      0009AF D0 05            [24] 2227 	pop	ar5
+      0009B1 D0 06            [24] 2228 	pop	ar6
+      0009B3 D0 07            [24] 2229 	pop	ar7
+      0009B5 45 F0            [12] 2230 	orl	a,b
+      0009B7 60 53            [24] 2231 	jz	00152$
+                                   2232 ;	main.c:305: P1_0 = 0;
+                                   2233 ;	assignBit
+      0009B9 C2 90            [12] 2234 	clr	_P1_0
+                                   2235 ;	main.c:306: P1_1 = 1;
+                                   2236 ;	assignBit
+      0009BB D2 91            [12] 2237 	setb	_P1_1
+                                   2238 ;	main.c:307: rec_char_byte_tcp = _w5500_readchar(SOCKET1);
+      0009BD 75 82 01         [24] 2239 	mov	dpl,#0x01
+      0009C0 C0 07            [24] 2240 	push	ar7
+      0009C2 C0 06            [24] 2241 	push	ar6
+      0009C4 C0 05            [24] 2242 	push	ar5
+      0009C6 12r00r00         [24] 2243 	lcall	__w5500_readchar
+      0009C9 AC 82            [24] 2244 	mov	r4,dpl
+      0009CB D0 05            [24] 2245 	pop	ar5
+      0009CD D0 06            [24] 2246 	pop	ar6
+      0009CF D0 07            [24] 2247 	pop	ar7
+                                   2248 ;	main.c:308: if (islower(rec_char_byte_tcp)) {
+      0009D1 8C 03            [24] 2249 	mov	ar3,r4
+                                   2250 ;	/usr/bin/../share/sdcc/include/ctype.h:71: return ((unsigned char)c >= 'a' && (unsigned char)c <= 'z');
+      0009D3 BB 61 00         [24] 2251 	cjne	r3,#0x61,00399$
+      0009D6                       2252 00399$:
+      0009D6 40 22            [24] 2253 	jc	00149$
+      0009D8 EB               [12] 2254 	mov	a,r3
+      0009D9 24 85            [12] 2255 	add	a,#0xff - 0x7a
+      0009DB 40 1D            [24] 2256 	jc	00149$
+                                   2257 ;	main.c:309: rec_char_byte_tcp = toupper(rec_char_byte_tcp);
+      0009DD 8C 02            [24] 2258 	mov	ar2,r4
+      0009DF 7B 00            [12] 2259 	mov	r3,#0x00
+      0009E1 8A 82            [24] 2260 	mov	dpl,r2
+      0009E3 8B 83            [24] 2261 	mov	dph,r3
+      0009E5 C0 07            [24] 2262 	push	ar7
+      0009E7 C0 06            [24] 2263 	push	ar6
+      0009E9 C0 05            [24] 2264 	push	ar5
+      0009EB 12r00r00         [24] 2265 	lcall	_toupper
+      0009EE AA 82            [24] 2266 	mov	r2,dpl
+      0009F0 AB 83            [24] 2267 	mov	r3,dph
+      0009F2 D0 05            [24] 2268 	pop	ar5
+      0009F4 D0 06            [24] 2269 	pop	ar6
+      0009F6 D0 07            [24] 2270 	pop	ar7
+      0009F8 8A 04            [24] 2271 	mov	ar4,r2
+      0009FA                       2272 00149$:
+                                   2273 ;	main.c:311: arrbuf[count] = rec_char_byte_tcp;
+      0009FA EE               [12] 2274 	mov	a,r6
+      0009FB 24r3E            [12] 2275 	add	a,#_loop_arrbuf_65536_83
+      0009FD F8               [12] 2276 	mov	r0,a
+      0009FE EC               [12] 2277 	mov	a,r4
+      0009FF F2               [24] 2278 	movx	@r0,a
+                                   2279 ;	main.c:312: recieved_tcp = 1;
+      000A00 78r29            [12] 2280 	mov	r0,#_loop_recieved_tcp_65536_83
+      000A02 74 01            [12] 2281 	mov	a,#0x01
+      000A04 F2               [24] 2282 	movx	@r0,a
+                                   2283 ;	main.c:313: count = count + 1;
+      000A05 8E 04            [24] 2284 	mov	ar4,r6
+      000A07 EC               [12] 2285 	mov	a,r4
+      000A08 04               [12] 2286 	inc	a
+      000A09 FE               [12] 2287 	mov	r6,a
+      000A0A 80 92            [24] 2288 	sjmp	00150$
+      000A0C                       2289 00152$:
+                                   2290 ;	main.c:315: if(recieved_tcp){
+      000A0C 78r29            [12] 2291 	mov	r0,#_loop_recieved_tcp_65536_83
+      000A0E E2               [24] 2292 	movx	a,@r0
+      000A0F 70 03            [24] 2293 	jnz	00402$
+      000A11 02r0Ar9E         [24] 2294 	ljmp	00163$
+      000A14                       2295 00402$:
+                                   2296 ;	main.c:316: P1_0 = 1;
+                                   2297 ;	assignBit
+      000A14 D2 90            [12] 2298 	setb	_P1_0
+                                   2299 ;	main.c:317: P1_1 = 0;
+                                   2300 ;	assignBit
+      000A16 C2 91            [12] 2301 	clr	_P1_1
+                                   2302 ;	main.c:318: if (arrbuf[0] == ':' && arrbuf[1] == '<' && arrbuf[count-1] == '>') {
+      000A18 78r3E            [12] 2303 	mov	r0,#_loop_arrbuf_65536_83
+      000A1A E2               [24] 2304 	movx	a,@r0
+      000A1B FC               [12] 2305 	mov	r4,a
+      000A1C BC 3A 02         [24] 2306 	cjne	r4,#0x3a,00403$
+      000A1F 80 03            [24] 2307 	sjmp	00404$
+      000A21                       2308 00403$:
+      000A21 02r0Ar9E         [24] 2309 	ljmp	00163$
+      000A24                       2310 00404$:
+      000A24 78r3F            [12] 2311 	mov	r0,#(_loop_arrbuf_65536_83 + 0x0001)
+      000A26 E2               [24] 2312 	movx	a,@r0
+      000A27 FC               [12] 2313 	mov	r4,a
+      000A28 BC 3C 73         [24] 2314 	cjne	r4,#0x3c,00163$
+      000A2B 8E 04            [24] 2315 	mov	ar4,r6
+      000A2D EC               [12] 2316 	mov	a,r4
+      000A2E 14               [12] 2317 	dec	a
+      000A2F 24r3E            [12] 2318 	add	a,#_loop_arrbuf_65536_83
+      000A31 F9               [12] 2319 	mov	r1,a
+      000A32 E3               [24] 2320 	movx	a,@r1
+      000A33 FB               [12] 2321 	mov	r3,a
+      000A34 BB 3E 67         [24] 2322 	cjne	r3,#0x3e,00163$
+                                   2323 ;	main.c:319: arrbuf[1] = '[';
+      000A37 78r3F            [12] 2324 	mov	r0,#(_loop_arrbuf_65536_83 + 0x0001)
+      000A39 74 5B            [12] 2325 	mov	a,#0x5b
+      000A3B F2               [24] 2326 	movx	@r0,a
+                                   2327 ;	main.c:320: arrbuf[count - 1] = ']';
+      000A3C EC               [12] 2328 	mov	a,r4
+      000A3D 14               [12] 2329 	dec	a
+      000A3E 24r3E            [12] 2330 	add	a,#_loop_arrbuf_65536_83
+      000A40 F8               [12] 2331 	mov	r0,a
+      000A41 74 5D            [12] 2332 	mov	a,#0x5d
+      000A43 F2               [24] 2333 	movx	@r0,a
+                                   2334 ;	main.c:321: if(arrbuf[2] == RTU_Address){
+      000A44 78r40            [12] 2335 	mov	r0,#(_loop_arrbuf_65536_83 + 0x0002)
+      000A46 E2               [24] 2336 	movx	a,@r0
+      000A47 FC               [12] 2337 	mov	r4,a
+      000A48 78r16            [12] 2338 	mov	r0,#_RTU_Address
+      000A4A E2               [24] 2339 	movx	a,@r0
+      000A4B B5 04 20         [24] 2340 	cjne	a,ar4,00154$
+                                   2341 ;	main.c:322: _w5500_writeto(SOCKET1, arrbuf, count);  
+      000A4E 78r00            [12] 2342 	mov	r0,#__w5500_writeto_PARM_2
+      000A50 74r3E            [12] 2343 	mov	a,#_loop_arrbuf_65536_83
+      000A52 F2               [24] 2344 	movx	@r0,a
+      000A53 08               [12] 2345 	inc	r0
+      000A54 E4               [12] 2346 	clr	a
+      000A55 F2               [24] 2347 	movx	@r0,a
+      000A56 08               [12] 2348 	inc	r0
+      000A57 74 60            [12] 2349 	mov	a,#0x60
+      000A59 F2               [24] 2350 	movx	@r0,a
+      000A5A 78r00            [12] 2351 	mov	r0,#__w5500_writeto_PARM_3
+      000A5C EE               [12] 2352 	mov	a,r6
+      000A5D F2               [24] 2353 	movx	@r0,a
+      000A5E 75 82 01         [24] 2354 	mov	dpl,#0x01
+      000A61 C0 07            [24] 2355 	push	ar7
+      000A63 C0 05            [24] 2356 	push	ar5
+      000A65 12r00r00         [24] 2357 	lcall	__w5500_writeto
+      000A68 D0 05            [24] 2358 	pop	ar5
+      000A6A D0 07            [24] 2359 	pop	ar7
+      000A6C 80 1E            [24] 2360 	sjmp	00155$
+      000A6E                       2361 00154$:
+                                   2362 ;	main.c:324: _w5500_writeto(SOCKET1, arrbuf, count);  
+      000A6E 78r00            [12] 2363 	mov	r0,#__w5500_writeto_PARM_2
+      000A70 74r3E            [12] 2364 	mov	a,#_loop_arrbuf_65536_83
+      000A72 F2               [24] 2365 	movx	@r0,a
+      000A73 08               [12] 2366 	inc	r0
+      000A74 E4               [12] 2367 	clr	a
+      000A75 F2               [24] 2368 	movx	@r0,a
+      000A76 08               [12] 2369 	inc	r0
+      000A77 74 60            [12] 2370 	mov	a,#0x60
+      000A79 F2               [24] 2371 	movx	@r0,a
+      000A7A 78r00            [12] 2372 	mov	r0,#__w5500_writeto_PARM_3
+      000A7C EE               [12] 2373 	mov	a,r6
+      000A7D F2               [24] 2374 	movx	@r0,a
+      000A7E 75 82 01         [24] 2375 	mov	dpl,#0x01
+      000A81 C0 07            [24] 2376 	push	ar7
+      000A83 C0 05            [24] 2377 	push	ar5
+      000A85 12r00r00         [24] 2378 	lcall	__w5500_writeto
+      000A88 D0 05            [24] 2379 	pop	ar5
+      000A8A D0 07            [24] 2380 	pop	ar7
+      000A8C                       2381 00155$:
+                                   2382 ;	main.c:326: _w5500_send(SOCKET1);
+      000A8C 75 82 01         [24] 2383 	mov	dpl,#0x01
+      000A8F C0 07            [24] 2384 	push	ar7
+      000A91 C0 05            [24] 2385 	push	ar5
+      000A93 12r00r00         [24] 2386 	lcall	__w5500_send
+      000A96 D0 05            [24] 2387 	pop	ar5
+      000A98 D0 07            [24] 2388 	pop	ar7
+                                   2389 ;	main.c:327: recieved_tcp = 0;
+      000A9A 78r29            [12] 2390 	mov	r0,#_loop_recieved_tcp_65536_83
+      000A9C E4               [12] 2391 	clr	a
+      000A9D F2               [24] 2392 	movx	@r0,a
+      000A9E                       2393 00163$:
+                                   2394 ;	main.c:331: if(status == SOCK_CLOSE_WAIT){
+      000A9E BF 1C 02         [24] 2395 	cjne	r7,#0x1c,00411$
+      000AA1 80 03            [24] 2396 	sjmp	00412$
+      000AA3                       2397 00411$:
+      000AA3 02r06r1F         [24] 2398 	ljmp	00167$
+      000AA6                       2399 00412$:
+                                   2400 ;	main.c:333: _w5500_clear_SNIR(SOCKET1);
+      000AA6 75 82 01         [24] 2401 	mov	dpl,#0x01
+      000AA9 C0 05            [24] 2402 	push	ar5
+      000AAB 12r00r00         [24] 2403 	lcall	__w5500_clear_SNIR
+                                   2404 ;	main.c:334: _w5500_clear_SNIR(SOCKET0);
+      000AAE 75 82 00         [24] 2405 	mov	dpl,#0x00
+      000AB1 12r00r00         [24] 2406 	lcall	__w5500_clear_SNIR
+                                   2407 ;	main.c:335: _w5500_close(SOCKET1);
+      000AB4 75 82 01         [24] 2408 	mov	dpl,#0x01
+      000AB7 12r00r00         [24] 2409 	lcall	__w5500_close
+                                   2410 ;	main.c:336: setuptcp();
+      000ABA 12r04rC5         [24] 2411 	lcall	_setuptcp
+      000ABD D0 05            [24] 2412 	pop	ar5
+                                   2413 ;	main.c:340: }
+      000ABF 02r06r1F         [24] 2414 	ljmp	00167$
+                                   2415 ;------------------------------------------------------------
+                                   2416 ;Allocation info for local variables in function 'main'
+                                   2417 ;------------------------------------------------------------
+                                   2418 ;	main.c:342: void main(void) {
+                                   2419 ;	-----------------------------------------
+                                   2420 ;	 function main
+                                   2421 ;	-----------------------------------------
+      000AC2                       2422 _main:
+                                   2423 ;	main.c:343: setup();
+      000AC2 12r04rEC         [24] 2424 	lcall	_setup
+                                   2425 ;	main.c:344: while(1) {
+      000AC5                       2426 00102$:
+                                   2427 ;	main.c:345: loop();
+      000AC5 12r06r13         [24] 2428 	lcall	_loop
+                                   2429 ;	main.c:347: }
+      000AC8 80 FB            [24] 2430 	sjmp	00102$
+                                   2431 	.area CSEG    (CODE)
+                                   2432 	.area CONST   (CODE)
+                                   2433 	.area CONST   (CODE)
+      000000                       2434 ___str_0:
+      000000 20                    2435 	.ascii " "
+      000001 00                    2436 	.db 0x00
+                                   2437 	.area CSEG    (CODE)
+                                   2438 	.area CONST   (CODE)
+      000002                       2439 ___str_1:
+      000002 0A                    2440 	.db 0x0a
+      000003 0D                    2441 	.db 0x0d
+      000004 43 55 52 52 45 4E 54  2442 	.ascii "CURRENT CONFIG:                    CHANGE CMD:"
+             20 43 4F 4E 46 49 47
+             3A 20 20 20 20 20 20
+             20 20 20 20 20 20 20
+             20 20 20 20 20 20 20
+             43 48 41 4E 47 45 20
+             43 4D 44 3A
+      000032 0A                    2443 	.db 0x0a
+      000033 0D                    2444 	.db 0x0d
+      000034 00                    2445 	.db 0x00
+                                   2446 	.area CSEG    (CODE)
+                                   2447 	.area CONST   (CODE)
+      000035                       2448 ___str_2:
+      000035 52 54 55 20 41 64 64  2449 	.ascii "RTU Addr (0-9): "
+             72 20 28 30 2D 39 29
+             3A 20
+      000045 00                    2450 	.db 0x00
+                                   2451 	.area CSEG    (CODE)
+                                   2452 	.area CONST   (CODE)
+      000046                       2453 ___str_3:
+      000046 20 20 20 20 20 20 20  2454 	.ascii "                  RTU=#"
+             20 20 20 20 20 20 20
+             20 20 20 20 52 54 55
+             3D 23
+      00005D 0A                    2455 	.db 0x0a
+      00005E 0D                    2456 	.db 0x0d
+      00005F 00                    2457 	.db 0x00
+                                   2458 	.area CSEG    (CODE)
+                                   2459 	.area CONST   (CODE)
+      000060                       2460 ___str_4:
+      000060 49 50 20 41 64 64 72  2461 	.ascii "IP Addr: "
+             3A 20
+      000069 00                    2462 	.db 0x00
+                                   2463 	.area CSEG    (CODE)
+                                   2464 	.area CONST   (CODE)
+      00006A                       2465 ___str_5:
+      00006A 20 20 20 20 20 20 20  2466 	.ascii "             IP=###.###.###.###"
+             20 20 20 20 20 20 49
+             50 3D 23 23 23 2E 23
+             23 23 2E 23 23 23 2E
+             23 23 23
+      000089 0A                    2467 	.db 0x0a
+      00008A 0D                    2468 	.db 0x0d
+      00008B 00                    2469 	.db 0x00
+                                   2470 	.area CSEG    (CODE)
+                                   2471 	.area CONST   (CODE)
+      00008C                       2472 ___str_6:
+      00008C 53 75 62 6E 65 74 20  2473 	.ascii "Subnet Mask: "
+             4D 61 73 6B 3A 20
+      000099 00                    2474 	.db 0x00
+                                   2475 	.area CSEG    (CODE)
+                                   2476 	.area CONST   (CODE)
+      00009A                       2477 ___str_7:
+      00009A 20 20 20 20 20 20 20  2478 	.ascii "         SUB=###.###.###.###"
+             20 20 53 55 42 3D 23
+             23 23 2E 23 23 23 2E
+             23 23 23 2E 23 23 23
+      0000B6 0A                    2479 	.db 0x0a
+      0000B7 0D                    2480 	.db 0x0d
+      0000B8 00                    2481 	.db 0x00
+                                   2482 	.area CSEG    (CODE)
+                                   2483 	.area CONST   (CODE)
+      0000B9                       2484 ___str_8:
+      0000B9 47 61 74 65 77 61 79  2485 	.ascii "Gateway: "
+             3A 20
+      0000C2 00                    2486 	.db 0x00
+                                   2487 	.area CSEG    (CODE)
+                                   2488 	.area CONST   (CODE)
+      0000C3                       2489 ___str_9:
+      0000C3 20 20 20 20 20 20 20  2490 	.ascii "              GATE=###.###.###.###"
+             20 20 20 20 20 20 20
+             47 41 54 45 3D 23 23
+             23 2E 23 23 23 2E 23
+             23 23 2E 23 23 23
+      0000E5 0A                    2491 	.db 0x0a
+      0000E6 0D                    2492 	.db 0x0d
+      0000E7 00                    2493 	.db 0x00
+                                   2494 	.area CSEG    (CODE)
+                                   2495 	.area CONST   (CODE)
+      0000E8                       2496 ___str_10:
+      0000E8 4D 41 43 20 41 64 64  2497 	.ascii "MAC Addr: "
+             72 3A 20
+      0000F2 00                    2498 	.db 0x00
+                                   2499 	.area CSEG    (CODE)
+                                   2500 	.area CONST   (CODE)
+      0000F3                       2501 ___str_11:
+      0000F3 20 20 20 20 20 20 20  2502 	.ascii "        MAC=FF FF FF FF FF FF"
+             20 4D 41 43 3D 46 46
+             20 46 46 20 46 46 20
+             46 46 20 46 46 20 46
+             46
+      000110 0A                    2503 	.db 0x0a
+      000111 0D                    2504 	.db 0x0d
+      000112 00                    2505 	.db 0x00
+                                   2506 	.area CSEG    (CODE)
+                                   2507 	.area CONST   (CODE)
+      000113                       2508 ___str_12:
+      000113 03                    2509 	.db 0x03
+      000114 00                    2510 	.db 0x00
+                                   2511 	.area CSEG    (CODE)
+                                   2512 	.area CONST   (CODE)
+      000115                       2513 ___str_13:
+      000115 0A                    2514 	.db 0x0a
+      000116 0D                    2515 	.db 0x0d
+      000117 67 65 74 5F 73 6D 69  2516 	.ascii "get_smir: "
+             72 3A 20
+      000121 00                    2517 	.db 0x00
+                                   2518 	.area CSEG    (CODE)
+                                   2519 	.area CONST   (CODE)
+      000122                       2520 ___str_14:
+      000122 0A                    2521 	.db 0x0a
+      000123 0D                    2522 	.db 0x0d
+      000124 67 65 74 5F 73 69 72  2523 	.ascii "get_sir: "
+             3A 20
+      00012D 00                    2524 	.db 0x00
+                                   2525 	.area CSEG    (CODE)
+                                   2526 	.area CONST   (CODE)
+      00012E                       2527 ___str_15:
+      00012E 0A                    2528 	.db 0x0a
+      00012F 0D                    2529 	.db 0x0d
+      000130 67 65 74 5F 69 6D 72  2530 	.ascii "get_imr_socket0: "
+             5F 73 6F 63 6B 65 74
+             30 3A 20
+      000141 00                    2531 	.db 0x00
+                                   2532 	.area CSEG    (CODE)
+                                   2533 	.area CONST   (CODE)
+      000142                       2534 ___str_16:
+      000142 0A                    2535 	.db 0x0a
+      000143 0D                    2536 	.db 0x0d
+      000144 67 65 74 5F 69 6D 72  2537 	.ascii "get_imr_socket1:"
+             5F 73 6F 63 6B 65 74
+             31 3A
+      000154 00                    2538 	.db 0x00
+                                   2539 	.area CSEG    (CODE)
+                                   2540 	.area CONST   (CODE)
+      000155                       2541 ___str_18:
+      000155 3F                    2542 	.ascii "?"
+      000156 00                    2543 	.db 0x00
+                                   2544 	.area CSEG    (CODE)
+                                   2545 	.area CONST   (CODE)
+      000157                       2546 ___str_19:
+      000157 0D                    2547 	.db 0x0d
+      000158 00                    2548 	.db 0x00
+                                   2549 	.area CSEG    (CODE)
+                                   2550 	.area CONST   (CODE)
+      000159                       2551 ___str_20:
+      000159 0A                    2552 	.db 0x0a
+      00015A 0D                    2553 	.db 0x0d
+      00015B 49 6E 76 61 6C 69 64  2554 	.ascii "Invalid Command"
+             20 43 6F 6D 6D 61 6E
+             64
+      00016A 00                    2555 	.db 0x00
+                                   2556 	.area CSEG    (CODE)
+                                   2557 	.area CONST   (CODE)
+      00016B                       2558 ___str_21:
+      00016B 0A                    2559 	.db 0x0a
+      00016C 00                    2560 	.db 0x00
+                                   2561 	.area CSEG    (CODE)
+                                   2562 	.area XINIT   (CODE)
+                                   2563 	.area CABS    (ABS,CODE)

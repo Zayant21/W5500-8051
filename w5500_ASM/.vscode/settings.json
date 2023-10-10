@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "serial.h": "c",
+        "w5500.h": "c",
+        "spigeneric.h": "c"
+    }
+}

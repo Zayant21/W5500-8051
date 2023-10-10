@@ -1,0 +1,91 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Intel 8051), page 1.
+Hexadecimal [24-Bits]
+
+
+
+                                      1 	.module SPIGeneric
+                                      2 
+                                      3     .globl __spigeneric_frame_start
+                                      4     .globl __spigeneric_frame_end
+                                      5     .globl __spigeneric_spit_bit
+                                      6     .globl __spigeneric_spit_byte
+                                      7     .globl __spigeneric_reset
+                                      8 
+                                      9 	.area RSEG    (ABS,DATA)
+      000000                         10 	.org 0x0000
+                           000092    11 pSCLK	=	0x92 ; 0x92 == P1_2
+                           000095    12 pMOSI	=	0x95 ; 0x95 == P1_5
+                           000094    13 pMISO	=	0x94 ; 0x94 == P1_4
+                           000093    14 pCS	=	0x93 ; 0x93 == P1_3
+                           000096    15 pRESET  =   0x96 ; P1_6
+                                     16 
+                                     17     .area CSEG
+                                     18 
+                                     19 ; This is all designed to be interfaced with C code compiled by SDCC using SPIGeneric.h
+                                     20 ; Therefore; the functions that take an argument expect the argument to be in DPL, and the functions that return a value place the value in DPL before returning
+                                     21 
+      000000                         22 __spigeneric_frame_start:
+      000000 D2 96            [12]   23     SETB    pRESET ; This should always be high, but just in case it somehow isn't, this is probably the cleanest place to set it
+      000002 C2 92            [12]   24     CLR pSCLK
+      000004 C2 95            [12]   25     CLR pMOSI
+      000006 D2 94            [12]   26     SETB    pMISO
+      000008 C2 93            [12]   27     CLR pCS
+      00000A 22               [24]   28     RET
+                                     29 
+      00000B                         30 __spigeneric_frame_end:
+      00000B D2 93            [12]   31     SETB    pCS
+      00000D D2 92            [12]   32     SETB    pSCLK
+      00000F D2 95            [12]   33     SETB    pMOSI
+      000011 D2 94            [12]   34     SETB    pMISO
+      000013 22               [24]   35     RET
+                                     36 
+      000014                         37 __spigeneric_spit_bit:
+      000014 E5 82            [12]   38 	MOV	A,DPL
+      000016 24 FF            [12]   39 	ADD	A,#0xFF
+      000018 92 95            [24]   40 	MOV	pMOSI,C
+      00001A D2 92            [12]   41 	SETB	pSCLK
+      00001C 30 94 05         [24]   42 	JNB	pMISO,MAKELOW
+      00001F 75 82 01         [24]   43 	MOV	DPL,#0x01
+      000022 80 03            [24]   44 	SJMP	DONE
+      000024                         45     MAKELOW:
+      000024 75 82 00         [24]   46         MOV	DPL,#0x00
+      000027                         47     DONE:
+      000027 C2 92            [12]   48         CLR	pSCLK
+      000029 22               [24]   49 	RET
+                                     50 
+      00002A                         51 __spigeneric_spit_byte:
+      00002A AF 82            [24]   52     MOV R7,DPL ;R7 stores the byte we are clocking out
+      00002C 7E 00            [12]   53 	MOV R6,#0x00 ;R6 stores the byte we are returning
+      00002E 7D 08            [12]   54 	MOV R5,#0x08 ;R5 is our loop counter since we gotta go through the loop eight times regardless of the contents of the byte
+                                     55 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Intel 8051), page 2.
+Hexadecimal [24-Bits]
+
+
+
+      000030                         56     TEST:
+      000030 BD 00 02         [24]   57         CJNE	R5,#0x00,LOOPTY
+      000033 80 12            [24]   58         SJMP    ALLDONE
+      000035                         59     LOOPTY:
+      000035 1D               [12]   60         DEC R5
+      000036 74 80            [12]   61         MOV	A,#0x80
+      000038 5F               [12]   62         ANL	A,R7
+      000039 F5 82            [12]   63         MOV	DPL,A
+      00003B 00 14            [12]   64         ACALL	__spigeneric_spit_bit
+      00003D EE               [12]   65         MOV A,R6
+      00003E 23               [12]   66         RL  A
+      00003F 45 82            [12]   67         ORL	A,DPL
+      000041 FE               [12]   68         MOV	R6,A
+      000042 EF               [12]   69         MOV A,R7
+      000043 23               [12]   70         RL  A
+      000044 FF               [12]   71         MOV	R7,A
+      000045 80 E9            [24]   72         SJMP	TEST
+      000047                         73     ALLDONE:
+      000047 8E 82            [24]   74         MOV DPL,R6
+      000049 22               [24]   75         RET
+                                     76 
+      00004A                         77 __spigeneric_reset:
+      00004A C2 96            [12]   78     CLR pRESET
+      00004C 00               [12]   79     NOP
+      00004D 00               [12]   80     NOP
+      00004E D2 96            [12]   81     SETB    pRESET
